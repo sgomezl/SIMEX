@@ -10,7 +10,7 @@ apply plugin: 'kotlin-android'
 
 android {
   namespace = "com.mygdx.primelogistics"
-  compileSdk = 35
+  compileSdk = 36
   sourceSets {
     main {
       manifest.srcFile 'AndroidManifest.xml'
@@ -32,7 +32,7 @@ android {
   }
   defaultConfig {
     applicationId 'com.mygdx.primelogistics'
-    minSdkVersion 21
+    minSdkVersion 23
     targetSdkVersion 35
     versionCode 1
     versionName "1.0"
@@ -50,7 +50,7 @@ android {
   }
 
   kotlin.compilerOptions.jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_1_8)
-  
+
 }
 
 repositories {
@@ -61,7 +61,11 @@ repositories {
 configurations { natives }
 
 dependencies {
-  coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'
+  implementation 'androidx.appcompat:appcompat:1.7.1'
+    implementation 'com.google.android.material:material:1.13.0'
+    implementation 'androidx.activity:activity:1.13.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'
   implementation "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
   implementation project(':core')
 
