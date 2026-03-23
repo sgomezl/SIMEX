@@ -1,5 +1,6 @@
 package com.mygdx.primelogistics.android
 
+<<<<<<< HEAD
 import android.app.Notification
 import android.os.Bundle
 import android.widget.Button
@@ -27,10 +28,21 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var btnVisible: ImageButton
     private var isPasswordVisible = false
 
+=======
+import android.os.Bundle
+import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import com.mygdx.primelogistics.R
+
+class LoginActivity : AppCompatActivity() {
+>>>>>>> 9001d2c (chore: fix activity theme configuration and modify AndoridManifest.xml)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_login)
+<<<<<<< HEAD
         defineComponent()
 
         btnVisible.setOnClickListener {
@@ -118,3 +130,12 @@ class LoginActivity : AppCompatActivity() {
         return result
     }
 }
+=======
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
+    }
+}
+>>>>>>> 9001d2c (chore: fix activity theme configuration and modify AndoridManifest.xml)
