@@ -450,6 +450,7 @@
         </PersistentDeviceSelectionData>
         <PersistentDeviceSelectionData>
 <<<<<<< HEAD
+<<<<<<< HEAD
           <option name="api" value="36" />
           <option name="brand" value="samsung" />
           <option name="codename" value="b5qsqw" />
@@ -2002,6 +2003,8 @@
           <option name="screenY" value="3088" />
         </PersistentDeviceSelectionData>
         <PersistentDeviceSelectionData>
+=======
+>>>>>>> 442d8c0 (update layout user home)
           <option name="api" value="36" />
           <option name="brand" value="samsung" />
           <option name="codename" value="b5qsqw" />
