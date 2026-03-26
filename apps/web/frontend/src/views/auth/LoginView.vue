@@ -46,6 +46,7 @@
 <script setup>
 
 import { ref } from 'vue'
+import axios from 'axios'
 
 import BaseInput from '../../components/base/BaseInput.vue'
 import BaseCheckbox from '../../components/base/Basecheckbox.vue'
@@ -60,7 +61,7 @@ const rememberMe = ref(false)
 const usernameError = ref('')
 const passwordError = ref('')
 
-function onSubmit() {
+async function onSubmit() {
 
   usernameError.value = ''
   passwordError.value = ''
@@ -81,8 +82,21 @@ function onSubmit() {
     return
   }
 
-  console.log('Formulario válido. Enviando datos...')
-  console.log('Usuario:', username.value)
-  console.log('Contraseña:', password.value)
+  try {
+
+    const response = await axios.post('/login', {
+      username: username.value,
+      password: password.value
+    })
+    console.log('Login succesful:', response.data)
+  }
+  catch (error) {
+    console.error('Login failed:', error)
+    if (error.response && error.response.status === 401) {
+      passwordError.value = 'Las credenciales proporcionadas son incorrectas.'
+    } else {
+      passwordError.value = 'Ocurrió un error al intentar iniciar sesión. Por favor, inténtalo de nuevo más tarde.'
+    }
+  }
 }
 </script>
