@@ -34,6 +34,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         android:usesCleartextTraffic="true"
 =======
 >>>>>>> 9001d2c (chore: fix activity theme configuration and modify AndoridManifest.xml)
@@ -42,6 +43,9 @@
 >>>>>>> 6fb87c1 (chore: update manifest)
 =======
 >>>>>>> 9001d2c (chore: fix activity theme configuration and modify AndoridManifest.xml)
+=======
+        android:usesCleartextTraffic="true"
+>>>>>>> 6fb87c1 (chore: update manifest)
         android:theme="@style/Theme.PrimeLogistics"
         tools:ignore="UnusedAttribute">
 
