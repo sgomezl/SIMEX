@@ -1,6 +1,7 @@
 package com.mygdx.primelogistics.android
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 import android.app.Notification
 import android.os.Bundle
 import android.widget.Button
@@ -29,6 +30,9 @@ class LoginActivity : AppCompatActivity() {
     private var isPasswordVisible = false
 
 =======
+=======
+import android.app.Notification
+>>>>>>> aa3483a (feat: remove toast and add tvNotification)
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -37,6 +41,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
+import android.widget.TextView
 import android.widget.Toast
 import com.mygdx.primelogistics.R
 import com.mygdx.primelogistics.android.api.RetrofitClient
@@ -57,6 +62,7 @@ class LoginActivity : AppCompatActivity() {
 =======
     private lateinit var etUsername: EditText
     private lateinit var etPassword: EditText
+    private lateinit var tvNotification: TextView
     private lateinit var btnLogin: Button
     private lateinit var btnVisible: ImageButton
     private var isPasswordVisible = false
@@ -190,6 +196,7 @@ class LoginActivity : AppCompatActivity() {
         etPassword = findViewById(R.id.etPasswordLogin)
         btnLogin = findViewById(R.id.btnLogin)
         btnVisible = findViewById(R.id.btnVisible)
+        tvNotification = findViewById(R.id.tvNotification)
     }
 
 
@@ -211,20 +218,24 @@ class LoginActivity : AppCompatActivity() {
 
         val loginRequest = LoginRequest(username, password)
 
+        btnLogin.isEnabled = false
+
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val response = RetrofitClient.api.login(loginRequest)
 
                 withContext(Dispatchers.Main) {
                     if (response.isSuccessful) {
-                        Toast.makeText(this@LoginActivity, "Login correcto", Toast.LENGTH_SHORT).show()
+                        tvNotification.text = "Login correcto"
                     } else {
-                        Toast.makeText(this@LoginActivity, "Error al iniciar sesión", Toast.LENGTH_SHORT).show()
+                        tvNotification.text = "Error de usuario o contraseña."
+                        btnLogin.isEnabled = true
                     }
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
-                    Toast.makeText(this@LoginActivity, "Error de conexión", Toast.LENGTH_SHORT).show()
+                    tvNotification.text = "Error de conexión"
+                    btnLogin.isEnabled = true
                 }
             }
         }
@@ -236,16 +247,19 @@ class LoginActivity : AppCompatActivity() {
         var result = false
 
         if (usernameEmpty && passwordEmpty){
-            Toast.makeText(this, "Introduce el nombre de usuario y la contraseña!", Toast.LENGTH_SHORT).show()
+            etUsername.error = "Introduce el nombre de usuario."
+            etPassword.error = "Introduce la contraseña."
+            tvNotification.text = "Introduce el nombre de usuario y la contraseña."
         } else if (usernameEmpty) {
-            Toast.makeText(this, "Introduce el nombre de usuario!", Toast.LENGTH_SHORT).show()
+            etUsername.error = "Introduce el nombre de usuario."
+            tvNotification.text = "Introduce el nombre de usuario."
         } else if (passwordEmpty) {
-            Toast.makeText(this, "Introduce la contraseña!", Toast.LENGTH_SHORT).show()
+            etPassword.error = "Introduce la contraseña."
+            tvNotification.text = "Introduce la contraseña."
         } else {
             result = true
 >>>>>>> 005e885 (feat: update loginActivity)
         }
-
         return result
     }
 }
