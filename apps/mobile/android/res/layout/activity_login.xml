@@ -94,17 +94,31 @@
             android:src="@drawable/visible"/>
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/tvNotification"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textSize="15sp"
+        android:fontFamily="@font/montserrat_medium"
+        android:textColor="@color/background"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/layoutPasswordLogin"
+        app:layout_constraintStart_toStartOf="@+id/layoutPasswordLogin"
+        app:layout_constraintEnd_toEndOf="@+id/layoutPasswordLogin"
+        />
+
     <Button
         android:id="@+id/btnLogin"
         android:layout_width="200dp"
         android:layout_height="45dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/btn_login"
         android:fontFamily="@font/montserrat_bold"
         android:text="Login"
         android:textColor="@color/principal"
         android:textSize="20sp"
-        app:layout_constraintTop_toBottomOf="@+id/layoutPasswordLogin"
-        app:layout_constraintStart_toStartOf="@+id/layoutPasswordLogin"
-        app:layout_constraintEnd_toEndOf="@+id/layoutPasswordLogin" />
+        app:layout_constraintTop_toBottomOf="@+id/tvNotification"
+        app:layout_constraintStart_toStartOf="@+id/tvNotification"
+        app:layout_constraintEnd_toEndOf="@+id/tvNotification" />
 </androidx.constraintlayout.widget.ConstraintLayout>
