@@ -1,15 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="center_horizontal"
-    android:layout_margin="10dp"
-    app:cardCornerRadius="15dp"
-    app:cardBackgroundColor="@android:color/white"
-    app:cardElevation="5dp">
+    android:layout_margin="20dp"
+    android:background="@drawable/card_border"
+    android:padding="2dp"
+    app:cardCornerRadius="12dp">
 
-</LinearLayout>
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:columnCount="2">
 
-</androidx.cardview.widget.CardView>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:layout_margin="10dp"
+            android:src="@drawable/paquete">
+
+        </ImageView>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:layout_margin="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="REF-1234567890"
+                android:textColor="@color/destacado"
+                android:textSize="25dp">
+
+            </TextView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rep. Dominicana"
+                android:fontFamily="@font/montserrat_bold"
+                android:textColor="@color/principal"
+                android:textSize="15dp">
+            </TextView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="España"
+                android:fontFamily="@font/montserrat_bold"
+                android:textColor="@color/principal"
+                android:textSize="15dp">
+            </TextView>
+        </LinearLayout>
+    </GridLayout>
+</FrameLayout>
