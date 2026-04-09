@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mainActivityUsuario"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -21,8 +22,8 @@
             android:layout_marginStart="20dp"
             android:scaleType="fitCenter"
             android:src="@drawable/white_logo"
-            android:background="@android:color/transparent">
-        </ImageButton>
+            android:background="@android:color/transparent"
+            android:contentDescription="Volver a home"/>
 
         <ImageButton
             android:id="@+id/btnLogout"
@@ -36,8 +37,8 @@
             android:padding="5dp"
             android:scaleType="fitCenter"
             android:src="@drawable/exit"
-            android:background="@android:color/transparent">
-        </ImageButton>
+            android:background="@android:color/transparent"
+            android:contentDescription="Logout"/>
     </GridLayout>
 
     <ImageButton
@@ -50,8 +51,8 @@
         android:padding="5dp"
         android:scaleType="fitCenter"
         android:src="@drawable/notifications"
-        android:background="@drawable/btn_orange">
-    </ImageButton>
+        android:background="@drawable/btn_orange"
+        android:contentDescription="Configurar notificaciones"/>
 
     <ImageView
         android:layout_width="wrap_content"
@@ -168,17 +169,13 @@
                 />
 
             <Button
-                android:layout_width="120dp"
-                android:layout_height="30dp"
-                android:background="null"
+                android:layout_width="150dp"
+                android:layout_height="48dp"
+                android:background="@android:color/transparent"
                 android:fontFamily="@font/montserrat_medium"
                 android:text="Subir archivo"
-                android:textAlignment="textStart"
-                android:textColor="@color/secundario"/>
-
+                android:textAlignment="textStart"/>
         </LinearLayout>
     </LinearLayout>
-
-
 
 </LinearLayout>

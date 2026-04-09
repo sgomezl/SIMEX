@@ -9,7 +9,4 @@
     app:cardCornerRadius="15dp"
     app:cardBackgroundColor="@android:color/white"
     app:cardElevation="5dp">
-
-</LinearLayout>
-
 </androidx.cardview.widget.CardView>

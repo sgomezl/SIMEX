@@ -136,7 +136,7 @@ tasks.register('run', Exec) {
   }
 
   def adb = path + "/platform-tools/adb"
-  commandLine "$adb", 'shell', 'am', 'start', '-n', 'com.mygdx.primelogistics/com.mygdx.primelogistics.android.AndroidLauncher'
+  commandLine "$adb", 'shell', 'am', 'start', '-n', 'com.mygdx.primelogistics/com.mygdx.primelogistics.android.LoginActivity'
 }
 
 eclipse.project.name = appName + "-android"
