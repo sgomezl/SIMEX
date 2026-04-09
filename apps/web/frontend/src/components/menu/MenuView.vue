@@ -1,25 +1,24 @@
 <template>
   <div class="flex h-screen w-full bg-gray-50 font-sans">
-
-    <aside class="w-16 bg-[#145699] flex flex-col items-center py-16 shrink-0">
-      <nav class="flex flex-col w-full">
-        <router-link
-          v-for="item in menuItems"
-          :key="item.id"
-          :to="item.path"
-          v-slot="{ isActive }"
-          :title="item.label"
+    <aside class="w-16 bg-[#145699] flex flex-col items-center py-16">
+     <nav class="flex flex-col w-full">
+      <router-link
+        v-for="item in menuItems"
+        :key="item.id"
+        :to="item.path"
+        v-slot="{ isActive }"
+        :title="item.label"
+      >
+        <div
+          :class="[
+            'w-full h-16 flex items-center justify-center transition-colors duration-200',
+            isActive ? 'bg-[#FD8036] text-white' : 'text-white hover:bg-white/10'
+          ]"
         >
-          <div
-            :class="[
-              'w-full h-16 flex items-center justify-center transition-colors duration-200',
-              isActive ? 'bg-[#FD8036] text-white' : 'text-white hover:bg-white/10'
-            ]"
-          >
-            <span class="material-symbols-outlined text-3xl">{{ item.icon }}</span>
-          </div>
-        </router-link>
-      </nav>
+          <span class="material-symbols-outlined text-3xl">{{ item.icon }}</span>
+        </div>
+      </router-link>
+</nav>
     </aside>
 
     <div class="flex-1 flex flex-col min-w-0">
