@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\CompanyController;
 
 Route::post('/login', [AuthController::class, 'login']);
 
