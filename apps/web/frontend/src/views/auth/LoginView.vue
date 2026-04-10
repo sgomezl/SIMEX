@@ -2,8 +2,6 @@
   <main class="min-h-screen bg-[#145699] flex items-center justify-center px-4 py-12">
     <div class="bg-white p-16 rounded-lg shadow-md w-full max-w-lg">
 
-
-
       <form @submit.prevent="onSubmit" class="space-y-6">
         <img
           :src="logoPrime"
@@ -14,8 +12,10 @@
 
         <BaseInput
           v-model="username"
-          type="username"
-          placeholder="Nombre de usuario *"
+          id="username"
+          label="Nombre de usuario"
+          type="text"
+          placeholder="Escribe tu usuario"
           :error="usernameError"
         />
 
@@ -35,8 +35,20 @@
         </div>
         -->
 
-        <div class="pt-2">
-          <BaseButton type="submit">
+          <button
+            type="button"
+            @click="showPassword = !showPassword"
+            class="absolute right-4 top-[38px] text-gray-400 hover:text-[#FD8036] transition-colors flex items-center justify-center"
+            title="Mostrar/Ocultar contraseña"
+          >
+            <span class="material-symbols-outlined text-[22px]">
+              {{ showPassword ? 'visibility_off' : 'visibility' }}
+            </span>
+          </button>
+        </div>
+
+        <div class="pt-4">
+          <BaseButton type="submit" class="w-full">
             Iniciar sesión
           </BaseButton>
         </div>
@@ -60,9 +72,10 @@
 const username = ref('')
 const password = ref('')
 // const rememberMe = ref(false)
+const showPassword = ref(false) // <-- Estado para el ojo
 
-  const usernameError = ref('')
-  const passwordError = ref('')
+const usernameError = ref('')
+const passwordError = ref('')
 
   async function onSubmit() {
     usernameError.value = ''
