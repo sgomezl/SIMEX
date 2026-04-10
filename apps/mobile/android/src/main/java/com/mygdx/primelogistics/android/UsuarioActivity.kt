@@ -47,6 +47,10 @@ class UsuarioActivity : AppCompatActivity() {
             finish()
         }
 
+        btnIdentificationCard.setOnClickListener {
+            startActivity(Intent(this, SubirDniActivity::class.java))
+        }
+
         loadCurrentUser()
     }
 
