@@ -129,16 +129,10 @@ const notifications = ref<any[]>([]);
 
 const showNotifications = ref(false);
 
-// Filtramos las notificaciones para mostrar SOLO las que no tienen logic_remove = 1
 const activeNotifications = computed(() => {
   return notifications.value.filter(notif => Number(notif.LOGIC_REMOVE) !== 1);
 });
 
-<<<<<<< HEAD
-// El contador de "Nuevas" ahora se basa solo en las notificaciones visibles
-=======
-
->>>>>>> bb7655212db2b7f0ea6bf79aa98838ee1e14620d
 const hasUnreadNotifications = computed(() => {
   return activeNotifications.value.some(notif => Number(notif.STATE_ID) === 1);
 });
