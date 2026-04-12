@@ -182,10 +182,14 @@ async function fetchNotifications() {
   }
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
 xwx
 =======
 
 >>>>>>> d5a3c4a (Menu with notifications done back and front)
+=======
+xwx
+>>>>>>> 95be369 (Minor changes)
 async function markAsRead(notif: any) {
   if (Number(notif.STATE_ID) === 2) return;
 
@@ -200,10 +204,14 @@ async function markAsRead(notif: any) {
   } catch (error) {
     console.error('Error marking notification as read:', error);
 <<<<<<< HEAD
+<<<<<<< HEAD
     notif.STATE_ID = 1;xw
 =======
     notif.STATE_ID = 1; // Typo corregido aquí
 >>>>>>> d5a3c4a (Menu with notifications done back and front)
+=======
+    notif.STATE_ID = 1;xw
+>>>>>>> 95be369 (Minor changes)
   }
 }
 
