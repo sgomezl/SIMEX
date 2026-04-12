@@ -169,7 +169,7 @@ async function fetchNotifications() {
     console.error('Error fetching notifications:', error);
   }
 }
-
+xwx
 async function markAsRead(notif: any) {
   if (Number(notif.STATE_ID) === 2) return;
 
@@ -183,7 +183,7 @@ async function markAsRead(notif: any) {
     });
   } catch (error) {
     console.error('Error marking notification as read:', error);
-    notif.STATE_ID = 1; // Typo corregido aquí
+    notif.STATE_ID = 1;xw
   }
 }
 
