@@ -1,25 +1,26 @@
 package com.mygdx.primelogistics.android.utils
 
 import android.content.Context
-import android.content.SharedPreferences
 
 class SessionManager(context: Context) {
-    private val prefs: SharedPreferences =
-        context.getSharedPreferences("AUTH_PREFS", Context.MODE_PRIVATE)
+    private val sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
 
-    fun saveAuthToken(token: String) {
-        prefs.edit().putString("auth_token", token).apply()
+    fun saveAccessToken(token: String) {
+        sharedPreferences.edit()
+            .putString(KEY_ACCESS_TOKEN, token)
+            .apply()
     }
 
-    fun fetchAuthToken(): String? {
-        return prefs.getString("auth_token", null)
+    fun getAccessToken(): String? {
+        return sharedPreferences.getString(KEY_ACCESS_TOKEN, null)
     }
 
-    fun saveUserName(name: String) {
-        prefs.edit().putString("user_name", name).apply()
+    fun clearSession() {
+        sharedPreferences.edit().clear().apply()
     }
 
-    fun fetchUserName(): String? {
-        return prefs.getString("user_name", "¡Usuario nulo!")
+    companion object {
+        private const val PREF_NAME = "simex_auth"
+        private const val KEY_ACCESS_TOKEN = "access_token"
     }
 }

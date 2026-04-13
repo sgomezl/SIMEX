@@ -7,10 +7,10 @@ data class LoginRequest(
     val password: String
 )
 
-data class AuthResponse(
+data class LoginResponse(
     @SerializedName("accessToken")
     val accessToken: String,
-
-    @SerializedName("user")
+    @SerializedName("tokenType")
+    val tokenType: String,
     val user: User
 )
