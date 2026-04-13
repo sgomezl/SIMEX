@@ -37,8 +37,3 @@ __screenshots__/
 
 # Vite
 *.timestamp-*-*.mjs
-
-# Archivos de entorno (Variables de entorno)
-.env
-.env.*
-!.env.example
