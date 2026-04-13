@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Simex")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ec333ab5bbc3fc4665aeb31d2defa1fd8472fbba")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d7e1c0e2a927cbab9d98370067ee7f3b2dcbf5e3")]
 [assembly: System.Reflection.AssemblyProductAttribute("Simex")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Simex")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
