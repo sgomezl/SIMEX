@@ -18,7 +18,7 @@ class SubirDniActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_subir_dni)
-
+        var currentUser = intent.getSerializableExtra("user_id")
         defineComponents()
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.mainActivitySubirDni)) { v, insets ->

@@ -19,11 +19,11 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class UsuarioActivity : AppCompatActivity() {
+    private var currentUser = 0
     private lateinit var sessionManager: SessionManager
     private lateinit var tvUserName: TextView
     private lateinit var tvCompanyName: TextView
     private lateinit var tvEmail: TextView
-    private lateinit var tvUsername: TextView
     private lateinit var btnLogout: ImageButton
     private lateinit var btnIdentificationCard: Button
 
@@ -31,6 +31,7 @@ class UsuarioActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_usuario)
+
 
         sessionManager = SessionManager(this)
         defineComponents()
@@ -48,7 +49,9 @@ class UsuarioActivity : AppCompatActivity() {
         }
 
         btnIdentificationCard.setOnClickListener {
-            startActivity(Intent(this, SubirDniActivity::class.java))
+            val intent = Intent(this, SubirDniActivity::class.java)
+            intent.putExtra("user_id", currentUser)
+            startActivity(intent)
         }
 
         loadCurrentUser()
@@ -93,6 +96,7 @@ class UsuarioActivity : AppCompatActivity() {
     }
 
     private fun bindUser(user: User) {
+        currentUser = user.id
         tvUserName.text = user.nombre
         tvCompanyName.text = user.company?.name ?: "Sin empresa"
         tvEmail.text = user.email
