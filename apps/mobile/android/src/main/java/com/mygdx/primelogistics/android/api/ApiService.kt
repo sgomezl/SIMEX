@@ -13,7 +13,4 @@ import retrofit2.http.POST
 interface ApiService {
     @POST("login")
     suspend fun login(@Body request: LoginRequest): Response<AuthResponse>
-
-    @GET("users")
-    suspend fun getUsers(@Header("Authorization") authorization: String): Response<List<User>>
 }
