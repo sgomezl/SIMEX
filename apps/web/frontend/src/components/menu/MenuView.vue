@@ -5,8 +5,8 @@
       <router-link
         v-for="item in menuItems"
         :key="item.id"
-        :to="item.path"  
-        v-slot="{ isActive }" 
+        :to="item.path"
+        v-slot="{ isActive }"
         :title="item.label"
       >
         <div
@@ -125,9 +125,11 @@
 <script setup lang="ts">
 import { onMounted, ref, computed } from 'vue';
 import api from '@services/api';
-import router from '@/router';
+import { useRouter } from 'vue-router';
 
-const activeMenu = ref('home');
+const router = useRouter();
+
+const activeMenu = ref('dashboard');
 const userName = ref('Usuario');
 const notifications = ref<any[]>([]);
 
@@ -181,15 +183,7 @@ async function fetchNotifications() {
     console.error('Error fetching notifications:', error);
   }
 }
-<<<<<<< HEAD
-<<<<<<< HEAD
-xwx
-=======
 
->>>>>>> d5a3c4a (Menu with notifications done back and front)
-=======
-xwx
->>>>>>> 95be369 (Minor changes)
 async function markAsRead(notif: any) {
   if (Number(notif.STATE_ID) === 2) return;
 
@@ -203,15 +197,7 @@ async function markAsRead(notif: any) {
     });
   } catch (error) {
     console.error('Error marking notification as read:', error);
-<<<<<<< HEAD
-<<<<<<< HEAD
-    notif.STATE_ID = 1;xw
-=======
-    notif.STATE_ID = 1; // Typo corregido aquí
->>>>>>> d5a3c4a (Menu with notifications done back and front)
-=======
-    notif.STATE_ID = 1;xw
->>>>>>> 95be369 (Minor changes)
+    notif.STATE_ID = 1;
   }
 }
 
@@ -251,12 +237,16 @@ async function logout() {
     console.error('Logout failed:', error);
   } finally {
     localStorage.clear();
-
     sessionStorage.clear();
-
     router.replace('/login');
-
     window.location.reload();
+  }
+}
+
+function navigateTo(item: any) {
+  activeMenu.value = item.id;
+  if (item.route) {
+    router.push({ name: item.route });
   }
 }
 
