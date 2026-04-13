@@ -9,38 +9,46 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mygdx.primelogistics.R
 import com.mygdx.primelogistics.android.models.Operation
 import com.mygdx.primelogistics.android.adapters.OpAdapter
+import com.mygdx.primelogistics.android.adapters.PropAdapter
+import com.mygdx.primelogistics.android.utils.SessionManager
 
 class ClientHomeActivity  : AppCompatActivity() {
-
-    private lateinit var recyclerProposals: RecyclerView
+    val sessionManager = SessionManager(this)
+    private lateinit var txtUserName: TextView
+    //private lateinit var recyclerProposals: RecyclerView
     private lateinit var recyclerRecent: RecyclerView
-    private lateinit var adapterProposals: PropAdapter
-    private lateinit var adapterRecent: RecAdapter
+    //private lateinit var adapterProposals: PropAdapter
+    private lateinit var adapterRecent: OpAdapter
     private val operations: MutableList<Operation> = mutableListOf()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_client_home)
 
-        recyclerProposals = findViewById(R.id.rvProposals)
-        recyclerProposals.layoutManager = LinearLayoutManager(this)
+        setContentView(R.layout.activity_client_home)
+        txtUserName = findViewById(R.id.txtUserName)
+        txtUserName.text = sessionManager.fetchUserName()
+
+        //recyclerProposals = findViewById(R.id.rvProposals)
+        //recyclerProposals.layoutManager = LinearLayoutManager(this)
 
         recyclerRecent = findViewById(R.id.rvRecent)
         recyclerRecent.layoutManager = LinearLayoutManager(this)
 
-        val userName: TextView = findViewById(R.id.txtUserName)
+        //adapterProposals = PropAdapter()
+        //recyclerProposals.adapter = adapterProposals
 
-        userName.text = user.Name
-
-        adapterProposals = PropAdapter(
-        )
-        recyclerProposals.adapter = adapterProposals
-
-        adapterRecent = OpAdapter(
-        )
+        adapterRecent = OpAdapter()
         recyclerRecent.adapter = adapterRecent
 
-        refrescarLista()
-    }
+        //refrescarLista()
 
+
+    }
+    /*
+    private fun refrescarLista() {
+        tareas.clear()
+        tareas.addAll(datos.listaTareas.filter { it.listaUsuarios.contains(user.Id) })
+        adapter.notifyDataSetChanged()
+    }
+    */
 }

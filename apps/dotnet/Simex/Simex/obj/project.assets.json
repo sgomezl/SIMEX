@@ -4922,23 +4922,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\chaox\\.nuget\\packages\\": {},
+    "C:\\Users\\msi\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\chaox\\Documents\\GitHub\\SIMEX\\apps\\dotnet\\Simex\\Simex\\Simex.csproj",
+      "projectUniqueName": "C:\\Users\\msi\\Documents\\GitHub\\SIMEX\\apps\\dotnet\\Simex\\Simex\\Simex.csproj",
       "projectName": "Simex",
-      "projectPath": "C:\\Users\\chaox\\Documents\\GitHub\\SIMEX\\apps\\dotnet\\Simex\\Simex\\Simex.csproj",
-      "packagesPath": "C:\\Users\\chaox\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\chaox\\Documents\\GitHub\\SIMEX\\apps\\dotnet\\Simex\\Simex\\obj\\",
+      "projectPath": "C:\\Users\\msi\\Documents\\GitHub\\SIMEX\\apps\\dotnet\\Simex\\Simex\\Simex.csproj",
+      "packagesPath": "C:\\Users\\msi\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\msi\\Documents\\GitHub\\SIMEX\\apps\\dotnet\\Simex\\Simex\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\chaox\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\msi\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -4965,7 +4965,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.300"
+      "SdkAnalysisLevel": "10.0.100"
     },
     "frameworks": {
       "net8.0": {
@@ -5013,7 +5013,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.312/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.104/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

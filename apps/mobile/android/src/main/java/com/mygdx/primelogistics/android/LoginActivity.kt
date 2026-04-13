@@ -1,6 +1,8 @@
 package com.mygdx.primelogistics.android
 
 import android.app.Notification
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -14,6 +16,7 @@ import android.widget.Toast
 import com.mygdx.primelogistics.R
 import com.mygdx.primelogistics.android.api.RetrofitClient
 import com.mygdx.primelogistics.android.models.LoginRequest
+import com.mygdx.primelogistics.android.utils.SessionManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -82,7 +85,25 @@ class LoginActivity : AppCompatActivity() {
 
                 withContext(Dispatchers.Main) {
                     if (response.isSuccessful) {
-                        tvNotification.text = "Login correcto"
+                        tvNotification.text = "Login correcto."
+
+                        val token = response.body()?.accessToken
+                        val nombreUsuario = response.body()?.user?.nombre
+
+                        if (token != null) {
+                            val sessionManager = SessionManager(this@LoginActivity)
+
+                            sessionManager.saveAuthToken(token)
+                            if (nombreUsuario != null) {
+                                sessionManager.saveUserName(nombreUsuario)
+                            }
+
+                            startActivity(Intent(this@LoginActivity, ClientHomeActivity::class.java))
+                            finish()
+                        } else {
+                            tvNotification.text = "Error: No se recibió el token."
+                            btnLogin.isEnabled = true
+                        }
                     } else {
                         tvNotification.text = "Error de usuario o contraseña."
                         btnLogin.isEnabled = true
@@ -90,7 +111,7 @@ class LoginActivity : AppCompatActivity() {
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
-                    tvNotification.text = "Error de conexión"
+                    tvNotification.text = "Error de conexión."
                     btnLogin.isEnabled = true
                 }
             }
