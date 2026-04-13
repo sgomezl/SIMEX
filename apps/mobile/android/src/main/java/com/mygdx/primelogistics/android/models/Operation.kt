@@ -10,7 +10,7 @@ data class Operation (
     val totalCost: Double,
     val etd: Date,
     val eta: Date,
-    val IncotermId: Int,
+    val incotermId: Int,
     val pkgQuantity: Int,
     val totalWeight: Double
 )
