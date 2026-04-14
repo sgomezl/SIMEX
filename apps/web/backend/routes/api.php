@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\OperationController;
 
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -34,4 +35,6 @@ Route::middleware('auth:sanctum')->group(function () {
   Route::get('/notifications', [NotificationController::class, 'index']);
   Route::put('/notifications/{id}/read', [NotificationController::class, 'markAsRead']);
   Route::delete('/notifications/{id}', [NotificationController::class, 'destroy']);
+
+  Route::post('/operations', [OperationController::class, 'store']);
 });

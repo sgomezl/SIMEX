@@ -1,6 +1,7 @@
 <?php
 
 namespace App\DTOs;
+use App\Models\Country;
 
 readonly class CountryDTO {
   public function __construct(
@@ -8,4 +9,16 @@ readonly class CountryDTO {
     public string $name
   )
   {}
+
+  public static function fromModel(Country $country): self
+  {
+    if (!$country) {
+      return null;
+    }
+
+    return new self(
+      id: $country->ID,
+      name: $country->NAME
+    );
+  }
 }
