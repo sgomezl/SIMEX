@@ -34,6 +34,8 @@ class Company extends Model
     return $this->belongsTo(CompanyType::class, 'COMPANY_TYPE_ID', 'ID');
   }
 
+  
+
   public function region()
   {
     return $this->belongsTo(Region::class, 'REGION_ID', 'ID');
