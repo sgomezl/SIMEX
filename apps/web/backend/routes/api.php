@@ -16,14 +16,17 @@ Route::middleware('auth:sanctum')->group(function () {
   Route::post('/user', [UserController::class, 'store']);
   Route::put('/user/{id}', [UserController::class, 'update']);
 
-  Route::get('/roles', [CatalogController::class, 'getRoles']);
+    Route::get('/roles', [CatalogController::class, 'getRoles']);
+    Route::get('/company-types', [CatalogController::class, 'getCompanyTypes']);
+    Route::get('/regions', [CatalogController::class, 'getRegions']);
+    Route::get('/cities', [CatalogController::class, 'getCities']);
+    Route::get('/countries', [CatalogController::class, 'getCountries']);
 
   Route::get('/companies', [CompanyController::class, 'index']);
   Route::get('/company/{company}', [CompanyController::class, 'show']);
   Route::post('/company', [CompanyController::class, 'store']);
   Route::put('/company/{company}', [CompanyController::class, 'update']);
   Route::delete('/company/{company}', [CompanyController::class, 'destroy']);
-  Route::get('/companies', [CatalogController::class, 'getCompanies']);
 
   Route::get('/notifications', [NotificationController::class, 'index']);
   Route::put('/notifications/{id}/read', [NotificationController::class, 'markAsRead']);
