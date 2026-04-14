@@ -17,6 +17,7 @@
           type="text"
           placeholder="Escribe tu usuario"
           :error="usernameError"
+          class="w-full"
         />
 
         <div class="relative">
@@ -135,11 +136,11 @@ const router = useRouter()
 
 const username = ref('')
 const password = ref('')
-<<<<<<< HEAD
+
 const showPassword = ref(false)
-=======
+
 // const rememberMe = ref(false)
->>>>>>> f104746 (minor changes)
+
 
   const usernameError = ref('')
   const passwordError = ref('')
