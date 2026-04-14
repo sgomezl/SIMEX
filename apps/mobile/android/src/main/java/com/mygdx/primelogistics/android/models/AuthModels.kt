@@ -14,3 +14,7 @@ data class LoginResponse(
     val tokenType: String,
     val user: User
 )
+
+data class UpdateIdentificationCardPathRequest(
+    val identificationCardPath: String
+)

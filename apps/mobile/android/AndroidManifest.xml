@@ -37,6 +37,10 @@
             android:exported="false" />
 
         <activity
+            android:name="com.mygdx.primelogistics.android.DescargarDniActivity"
+            android:exported="false" />
+
+        <activity
             android:name="com.mygdx.primelogistics.android.AndroidLauncher"
             android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize|screenLayout"
             android:exported="false"

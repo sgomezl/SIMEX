@@ -7,12 +7,16 @@
       "RelativeMoniker": "D:0:0:{7C7B7B8D-FDFA-409A-9A68-E653FFDC030E}|Simex\\Simex.csproj|solutionrelative:simex\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7C7B7B8D-FDFA-409A-9A68-E653FFDC030E}|Simex\\Simex.csproj|c:\\users\\chaox\\documents\\github\\simex\\apps\\dotnet\\simex\\simex\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7C7B7B8D-FDFA-409A-9A68-E653FFDC030E}|Simex\\Simex.csproj|solutionrelative:simex\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7C7B7B8D-FDFA-409A-9A68-E653FFDC030E}|Simex\\Simex.csproj|c:\\users\\chaox\\documents\\github\\simex\\apps\\dotnet\\simex\\simex\\dtos\\auth\\authdtos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7C7B7B8D-FDFA-409A-9A68-E653FFDC030E}|Simex\\Simex.csproj|solutionrelative:simex\\dtos\\auth\\authdtos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{7C7B7B8D-FDFA-409A-9A68-E653FFDC030E}|Simex\\Simex.csproj|c:\\users\\chaox\\documents\\github\\simex\\apps\\dotnet\\simex\\simex\\simex.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}",
       "RelativeMoniker": "D:0:0:{7C7B7B8D-FDFA-409A-9A68-E653FFDC030E}|Simex\\Simex.csproj|solutionrelative:simex\\simex.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7C7B7B8D-FDFA-409A-9A68-E653FFDC030E}|Simex\\Simex.csproj|c:\\users\\chaox\\documents\\github\\simex\\apps\\dotnet\\simex\\simex\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7C7B7B8D-FDFA-409A-9A68-E653FFDC030E}|Simex\\Simex.csproj|solutionrelative:simex\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,7 +26,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Bookmark",
@@ -42,13 +46,26 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "AuthDtos.cs",
+              "DocumentMoniker": "C:\\Users\\chaox\\Documents\\GitHub\\SIMEX\\apps\\dotnet\\Simex\\Simex\\Dtos\\Auth\\AuthDtos.cs",
+              "RelativeDocumentMoniker": "Simex\\Dtos\\Auth\\AuthDtos.cs",
+              "ToolTip": "C:\\Users\\chaox\\Documents\\GitHub\\SIMEX\\apps\\dotnet\\Simex\\Simex\\Dtos\\Auth\\AuthDtos.cs",
+              "RelativeToolTip": "Simex\\Dtos\\Auth\\AuthDtos.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAgwBIAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-14T13:31:14.27Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 0,
               "Title": "AuthController.cs",
               "DocumentMoniker": "C:\\Users\\chaox\\Documents\\GitHub\\SIMEX\\apps\\dotnet\\Simex\\Simex\\Controllers\\AuthController.cs",
               "RelativeDocumentMoniker": "Simex\\Controllers\\AuthController.cs",
               "ToolTip": "C:\\Users\\chaox\\Documents\\GitHub\\SIMEX\\apps\\dotnet\\Simex\\Simex\\Controllers\\AuthController.cs",
               "RelativeToolTip": "Simex\\Controllers\\AuthController.cs",
-              "ViewState": "AgIAAAwAAAAAAAAAAAAAAAgAAAASAAAAAAAAAA==",
+              "ViewState": "AgIAAH8AAAAAAAAAAAAYwJ0AAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-04-08T14:30:20.248Z",
               "EditorCaption": ""
@@ -68,13 +85,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\chaox\\Documents\\GitHub\\SIMEX\\apps\\dotnet\\Simex\\Simex\\Program.cs",
               "RelativeDocumentMoniker": "Simex\\Program.cs",
               "ToolTip": "C:\\Users\\chaox\\Documents\\GitHub\\SIMEX\\apps\\dotnet\\Simex\\Simex\\Program.cs",
               "RelativeToolTip": "Simex\\Program.cs",
-              "ViewState": "AgIAABIAAAAAAAAAAAAAABkAAAA0AAAAAAAAAA==",
+              "ViewState": "AgIAACIAAAAAAAAAAIAwwDEAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-04-08T14:29:55.538Z",
               "EditorCaption": ""

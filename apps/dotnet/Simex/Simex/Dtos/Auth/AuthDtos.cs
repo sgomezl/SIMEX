@@ -48,3 +48,8 @@ public class CompanyDto
 
     public string Name { get; set; } = string.Empty;
 }
+
+public class UpdateIdentificationCardPathDto
+{
+    public string IdentificationCardPath { get; set; } = string.Empty;
+}

@@ -105,6 +105,58 @@ public class AuthController : ControllerBase
         return result;
     }
 
+    [Authorize]
+    [HttpPut("id-card-path")]
+    public async Task<IActionResult> UpdateIdentificationCardPath([FromBody] UpdateIdentificationCardPathDto request)
+    {
+        IActionResult result;
+        string? userIdClaim;
+        User? user;
+
+        userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        if (string.IsNullOrWhiteSpace(userIdClaim))
+        {
+            result = Unauthorized(new { message = "Token invalido." });
+        }
+        else
+        {
+            if (string.IsNullOrWhiteSpace(request.IdentificationCardPath))
+            {
+                result = BadRequest(new { message = "La ruta del DNI es obligatoria." });
+            }
+            else
+            {
+                if (!int.TryParse(userIdClaim, out int userId))
+                {
+                    result = Unauthorized(new { message = "Token invalido." });
+                }
+                else
+                {
+                    user = await _context.Users.FindAsync(userId);
+
+                    if (user == null)
+                    {
+                        result = NotFound(new { message = "Usuario no encontrado." });
+                    }
+                    else
+                    {
+                        user.IdentificationCardPath = request.IdentificationCardPath;
+                        await _context.SaveChangesAsync();
+
+                        result = Ok(new
+                        {
+                            message = "Ruta del DNI actualizada correctamente.",
+                            identificationCardPath = user.IdentificationCardPath
+                        });
+                    }
+                }
+            }
+        }
+
+        return result;
+    }
+
     private static bool VerifyPassword(string plainPassword, string hashedPassword)
     {
         bool result;

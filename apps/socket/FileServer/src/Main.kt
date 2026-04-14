@@ -71,15 +71,13 @@ private fun receiveUpload(input: DataInputStream, output: DataOutputStream) {
 
 
 private fun sendDownload(input: DataInputStream, output: DataOutputStream) {
-    val userId = input.readInt()
     val filenameRaw = input.readUTF()
     val filename = File(filenameRaw).name
-    val safeFilename = "user_${userId}_$filename"
-    val file = File(BASE_DIR, safeFilename)
+    val file = File(BASE_DIR, filename)
     if (!file.exists() || !file.isFile) {
         output.writeBoolean(false)
         output.flush()
-        println("Download missing: " + safeFilename)
+        println("Download missing: " + filename)
         return
     }
 

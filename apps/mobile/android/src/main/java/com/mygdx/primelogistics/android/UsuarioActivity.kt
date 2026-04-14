@@ -20,6 +20,9 @@ import kotlinx.coroutines.withContext
 
 class UsuarioActivity : AppCompatActivity() {
     private var currentUser = 0
+    private var currentUserName: String = ""
+    private var currentCompanyName: String = ""
+    private var currentIdentificationCardPath: String = ""
     private lateinit var sessionManager: SessionManager
     private lateinit var tvUserName: TextView
     private lateinit var tvCompanyName: TextView
@@ -49,8 +52,16 @@ class UsuarioActivity : AppCompatActivity() {
         }
 
         btnIdentificationCard.setOnClickListener {
-            val intent = Intent(this, SubirDniActivity::class.java)
+            val intent = if (currentIdentificationCardPath.isBlank()) {
+                Intent(this, SubirDniActivity::class.java)
+            } else {
+                Intent(this, DescargarDniActivity::class.java).apply {
+                    putExtra("identification_card_path", currentIdentificationCardPath)
+                }
+            }
             intent.putExtra("user_id", currentUser)
+            intent.putExtra("user_name", currentUserName)
+            intent.putExtra("company_name", currentCompanyName)
             startActivity(intent)
         }
 
@@ -97,13 +108,16 @@ class UsuarioActivity : AppCompatActivity() {
 
     private fun bindUser(user: User) {
         currentUser = user.id
-        tvUserName.text = user.nombre
-        tvCompanyName.text = user.company?.name ?: "Sin empresa"
+        currentUserName = user.nombre
+        currentCompanyName = user.company?.name ?: "Sin empresa"
+        currentIdentificationCardPath = user.identificationCardPath ?: ""
+        tvUserName.text = currentUserName
+        tvCompanyName.text = currentCompanyName
         tvEmail.text = user.email
         btnIdentificationCard.text = if (user.identificationCardPath.isNullOrBlank()) {
-            "Sin documento"
+            "Subir DNI"
         } else {
-            "Documento cargado"
+            "Descargar DNI"
         }
     }
 }
