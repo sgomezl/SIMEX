@@ -8,7 +8,6 @@
           alt="Logo Prime"
           class="mx-auto mb-8 w-80 h-auto object-contain"
         />
-
         <BaseInput
           v-model="username"
           id="username"
