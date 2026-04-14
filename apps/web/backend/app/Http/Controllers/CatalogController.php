@@ -30,6 +30,8 @@ use \App\DTOs\SendTypesDTO;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
+
+
 class CatalogController extends Controller
 {
   public function getRoles()
