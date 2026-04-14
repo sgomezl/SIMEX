@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\DTOs\CreateCompanyDTO;
-use App\DTOs\UpdateCompanyDTO;
+use App\DTOs\createCompanyDTO;
+use App\DTOs\updateCompanyDTO;
 use App\Models\Company;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -18,7 +18,7 @@ class CompanyController extends Controller
 
     public function store(Request $request): JsonResponse
     {
-        
+
         $request->validate([
             'NAME' => 'required|string|max:255',
             'EMAIL' => 'required|email|unique:COMPANY,EMAIL',
@@ -94,7 +94,7 @@ class CompanyController extends Controller
         $company->ACTIVE = $request->input('ACTIVE', $company->ACTIVE);
         $company->PHONE_NUMBER = $request->input('PHONE_NUMBER', $company->PHONE_NUMBER);
         $company->ICON_PATH = $request->input('ICON_PATH', $company->ICON_PATH);
-        
+
         $company->save();
 
         $company->load(['companyType', 'region', 'city']);
