@@ -25,33 +25,60 @@ import java.io.DataOutputStream
 import java.net.Socket
 
 class SubirDniActivity : AppCompatActivity() {
+
     private lateinit var btnHomeUsuario: ImageButton
     private lateinit var btnVolver: Button
     private lateinit var btnSubirDNI: ImageButton
     private lateinit var tvUserName: TextView
     private lateinit var tvCompanyName: TextView
     private lateinit var tvSelectedFile: TextView
-    private var selectedUri: Uri? = null
-    private var currentUser: Int = -1
 
+    private var selectedUri: Uri? = null
+    private var currentUserId: Int = -1
+    private var currentUserName: String = "Usuario"
+    private var currentCompanyName: String = "Sin empresa"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_subir_dni)
-        currentUser = intent.getIntExtra("user_id", -1)
-        val userName = intent.getStringExtra("user_name") ?: "Usuario"
-        val companyName = intent.getStringExtra("company_name") ?: "Sin empresa"
-        defineComponents()
-        tvUserName.text = userName
-        tvCompanyName.text = companyName
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.mainActivitySubirDni)) { v, insets ->
+        definirComponentes()
+        leerDatosIntent()
+        configurarWindowInsets()
+        cargarDatosUsuario()
+        configurarEventos()
+    }
+
+    private fun definirComponentes() {
+        btnHomeUsuario = findViewById(R.id.btnHomeUsuario)
+        btnVolver = findViewById(R.id.btnVolve)
+        btnSubirDNI = findViewById(R.id.btnSubirDNI)
+        tvUserName = findViewById(R.id.tvUserName)
+        tvCompanyName = findViewById(R.id.tvCompanyName)
+        tvSelectedFile = findViewById(R.id.tvNombreArchivo)
+    }
+
+    private fun leerDatosIntent() {
+        currentUserId = intent.getIntExtra("user_id", -1)
+        currentUserName = intent.getStringExtra("user_name") ?: "Usuario"
+        currentCompanyName = intent.getStringExtra("company_name") ?: "Sin empresa"
+    }
+
+    private fun configurarWindowInsets() {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.mainActivitySubirDni)) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            view.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+    }
 
+    private fun cargarDatosUsuario() {
+        tvUserName.text = currentUserName
+        tvCompanyName.text = currentCompanyName
+    }
+
+    private fun configurarEventos() {
         btnHomeUsuario.setOnClickListener {
             volverAUsuario()
         }
@@ -65,27 +92,19 @@ class SubirDniActivity : AppCompatActivity() {
         }
     }
 
-    private fun defineComponents() {
-        btnHomeUsuario = findViewById(R.id.btnHomeUsuario)
-        btnVolver = findViewById(R.id.btnVolve)
-        btnSubirDNI = findViewById(R.id.btnSubirDNI)
-        tvUserName = findViewById(R.id.tvUserName)
-        tvCompanyName = findViewById(R.id.tvCompanyName)
-        tvSelectedFile = findViewById(R.id.tvNombreArchivo)
-
-    }
-
     private fun volverAUsuario() {
-        startActivity(Intent(this, UsuarioActivity::class.java))
+        val intent = Intent(this, UsuarioActivity::class.java)
+        startActivity(intent)
         finish()
     }
 
-    private fun getFileName(uri: Uri): String? {
+    private fun obtenerNombreArchivo(uri: Uri): String? {
         var fileName: String? = null
 
         val cursor = contentResolver.query(uri, null, null, null, null)
         cursor?.use {
             val nameIndex = it.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+
             if (it.moveToFirst() && nameIndex >= 0) {
                 fileName = it.getString(nameIndex)
             }
@@ -99,18 +118,25 @@ class SubirDniActivity : AppCompatActivity() {
     ) { uri ->
         if (uri != null) {
             selectedUri = uri
-            tvSelectedFile.text = "Subiendo ${getFileName(uri) ?: "archivo"}..."
+            subirArchivoSeleccionado(uri)
+        }
+    }
 
-            if (currentUser == -1) {
-                tvSelectedFile.text = "Usuario invalido"
-                return@registerForActivityResult
-            }
+    private fun subirArchivoSeleccionado(uri: Uri) {
+        val fileName = obtenerNombreArchivo(uri) ?: "archivo"
+
+        if (currentUserId == -1) {
+            tvSelectedFile.text = "Usuario invalido"
+        } else {
+            tvSelectedFile.text = "Subiendo $fileName..."
 
             lifecycleScope.launch {
-                val savedFileName = uploadFileToServer(currentUser, uri)
+                val savedFileName = subirArchivoServidor(currentUserId, uri)
 
-                if (savedFileName != null) {
-                    val updated = updateIdentificationCardPath(savedFileName)
+                if (savedFileName == null) {
+                    tvSelectedFile.text = "Error al subir archivo"
+                } else {
+                    val updated = actualizarRutaDni(savedFileName)
 
                     if (updated) {
                         tvSelectedFile.text = "Archivo subido correctamente"
@@ -118,54 +144,65 @@ class SubirDniActivity : AppCompatActivity() {
                     } else {
                         tvSelectedFile.text = "Archivo subido, pero no se pudo guardar la ruta"
                     }
-                } else {
-                    tvSelectedFile.text = "Error al subir archivo"
                 }
             }
-
         }
     }
 
-    private suspend fun uploadFileToServer(userId: Int, uri: Uri): String? {
-        val fileName = getFileName(uri) ?: return null
-        val fileBytes = readFileBytes(uri) ?: return null
+    private suspend fun subirArchivoServidor(userId: Int, uri: Uri): String? {
+        val fileName = obtenerNombreArchivo(uri) ?: return null
+        val fileBytes = leerBytesArchivo(uri) ?: return null
 
         return withContext(Dispatchers.IO) {
-            Socket("10.0.2.2", 5000).use { socket ->
-                val input = DataInputStream(socket.getInputStream())
-                val output = DataOutputStream(socket.getOutputStream())
+            try {
+                Socket("10.0.2.2", 5000).use { socket ->
+                    val input = DataInputStream(socket.getInputStream())
+                    val output = DataOutputStream(socket.getOutputStream())
 
-                output.writeUTF("UPLOAD")
-                output.writeInt(userId)
-                output.writeUTF(fileName)
-                output.writeLong(fileBytes.size.toLong())
-                output.write(fileBytes)
-                output.flush()
+                    output.writeUTF("UPLOAD")
+                    output.writeInt(userId)
+                    output.writeUTF(fileName)
+                    output.writeLong(fileBytes.size.toLong())
+                    output.write(fileBytes)
+                    output.flush()
 
-                val response = input.readUTF()
-                val savedFileName = input.readUTF()
+                    val response = input.readUTF()
+                    val savedFileName = input.readUTF()
 
-                if (response == "OK") savedFileName else null
+                    if (response == "OK") {
+                        savedFileName
+                    } else {
+                        null
+                    }
+                }
+            } catch (e: Exception) {
+                null
             }
         }
     }
 
-    private fun readFileBytes(uri: Uri): ByteArray? {
-        return contentResolver.openInputStream(uri)?.use { input ->
-            input.readBytes()
+    private fun leerBytesArchivo(uri: Uri): ByteArray? {
+        return try {
+            contentResolver.openInputStream(uri)?.use { input ->
+                input.readBytes()
+            }
+        } catch (e: Exception) {
+            null
         }
     }
 
-    private suspend fun updateIdentificationCardPath(savedFileName: String): Boolean {
+    private suspend fun actualizarRutaDni(savedFileName: String): Boolean {
         val token = SessionManager(this).getAccessToken() ?: return false
 
-        val response = RetrofitClient.api.updateIdentificationCardPath(
-            authorization = "Bearer $token",
-            request = UpdateIdentificationCardPathRequest(savedFileName)
-        )
+        return try {
+            val response = RetrofitClient.api.updateIdentificationCardPath(
+                authorization = "Bearer $token",
+                request = UpdateIdentificationCardPathRequest(savedFileName)
+            )
 
-        return response.isSuccessful
+            response.isSuccessful
+        } catch (e: Exception) {
+            false
+        }
     }
-
-
 }

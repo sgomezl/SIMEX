@@ -5,8 +5,8 @@ import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.os.Environment
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -17,14 +17,15 @@ import com.mygdx.primelogistics.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.ByteArrayOutputStream
 import java.io.DataInputStream
 import java.io.DataOutputStream
-import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.net.Socket
 
 class DescargarDniActivity : AppCompatActivity() {
+
     private lateinit var btnHomeUsuario: ImageButton
     private lateinit var btnDescargarDNI: Button
     private lateinit var btnReuploadDNI: Button
@@ -33,9 +34,10 @@ class DescargarDniActivity : AppCompatActivity() {
     private lateinit var tvCompanyName: TextView
     private lateinit var tvArchivoDni: TextView
     private lateinit var ivDniPreview: ImageView
-    private var currentUser: Int = -1
-    private var currentUserName: String = ""
-    private var currentCompanyName: String = ""
+
+    private var currentUserId: Int = -1
+    private var currentUserName: String = "Usuario"
+    private var currentCompanyName: String = "Sin empresa"
     private var identificationCardPath: String = ""
     private var previewBytes: ByteArray? = null
 
@@ -44,24 +46,57 @@ class DescargarDniActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_descargar_dni)
 
-        currentUser = intent.getIntExtra("user_id", -1)
+        definirComponentes()
+        leerDatosIntent()
+        configurarWindowInsets()
+        cargarDatosUsuario()
+        configurarEventos()
+
+        if (identificationCardPath.isNotBlank()) {
+            cargarVistaPrevia()
+        } else {
+            tvArchivoDni.text = "No hay documento disponible"
+        }
+    }
+
+    private fun definirComponentes() {
+        btnHomeUsuario = findViewById(R.id.btnHomeUsuario)
+        btnDescargarDNI = findViewById(R.id.btnDescargarDNI)
+        btnReuploadDNI = findViewById(R.id.btnReuploadDNI)
+        btnVolver = findViewById(R.id.btnVolver)
+        tvUserName = findViewById(R.id.tvUserName)
+        tvCompanyName = findViewById(R.id.tvCompanyName)
+        tvArchivoDni = findViewById(R.id.tvArchivoDni)
+        ivDniPreview = findViewById(R.id.ivDniPreview)
+    }
+
+    private fun leerDatosIntent() {
+        currentUserId = intent.getIntExtra("user_id", -1)
         identificationCardPath = intent.getStringExtra("identification_card_path") ?: ""
         currentUserName = intent.getStringExtra("user_name") ?: "Usuario"
         currentCompanyName = intent.getStringExtra("company_name") ?: "Sin empresa"
+    }
 
-        defineComponents()
-        tvUserName.text = currentUserName
-        tvCompanyName.text = currentCompanyName
-        tvArchivoDni.text = identificationCardPath.ifBlank {
-            "No hay documento disponible"
-        }
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.mainActivityDescargarDni)) { v, insets ->
+    private fun configurarWindowInsets() {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.mainActivityDescargarDni)) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            view.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+    }
 
+    private fun cargarDatosUsuario() {
+        tvUserName.text = currentUserName
+        tvCompanyName.text = currentCompanyName
+
+        if (identificationCardPath.isBlank()) {
+            tvArchivoDni.text = "No hay documento disponible"
+        } else {
+            tvArchivoDni.text = identificationCardPath
+        }
+    }
+
+    private fun configurarEventos() {
         btnHomeUsuario.setOnClickListener {
             volverAUsuario()
         }
@@ -74,52 +109,20 @@ class DescargarDniActivity : AppCompatActivity() {
             volverASubirDni()
         }
 
-        if (identificationCardPath.isNotBlank()) {
-            cargarVistaPrevia()
-        }
-
         btnDescargarDNI.setOnClickListener {
-            if (identificationCardPath.isBlank()) {
-                tvArchivoDni.text = "No hay documento disponible"
-                return@setOnClickListener
-            }
-
-            tvArchivoDni.text = "Descargando documento..."
-
-            lifecycleScope.launch {
-                val downloadedFile = saveDownloadedFile(
-                    identificationCardPath,
-                    previewBytes ?: fetchFileBytesFromServer(identificationCardPath)
-                )
-
-                tvArchivoDni.text = if (downloadedFile != null) {
-                    "Documento descargado en: ${downloadedFile.name}"
-                } else {
-                    "Error al descargar el documento"
-                }
-            }
+            descargarDni()
         }
-    }
-
-    private fun defineComponents() {
-        btnHomeUsuario = findViewById(R.id.btnHomeUsuario)
-        btnDescargarDNI = findViewById(R.id.btnDescargarDNI)
-        btnReuploadDNI = findViewById(R.id.btnReuploadDNI)
-        btnVolver = findViewById(R.id.btnVolver)
-        tvUserName = findViewById(R.id.tvUserName)
-        tvCompanyName = findViewById(R.id.tvCompanyName)
-        tvArchivoDni = findViewById(R.id.tvArchivoDni)
-        ivDniPreview = findViewById(R.id.ivDniPreview)
     }
 
     private fun volverAUsuario() {
-        startActivity(Intent(this, UsuarioActivity::class.java))
+        val intent = Intent(this, UsuarioActivity::class.java)
+        startActivity(intent)
         finish()
     }
 
     private fun volverASubirDni() {
         val intent = Intent(this, SubirDniActivity::class.java)
-        intent.putExtra("user_id", currentUser)
+        intent.putExtra("user_id", currentUserId)
         intent.putExtra("user_name", currentUserName)
         intent.putExtra("company_name", currentCompanyName)
         startActivity(intent)
@@ -130,73 +133,103 @@ class DescargarDniActivity : AppCompatActivity() {
         tvArchivoDni.text = "Cargando vista previa..."
 
         lifecycleScope.launch {
-            val fileBytes = fetchFileBytesFromServer(identificationCardPath)
+            val fileBytes = descargarBytesServidor(identificationCardPath)
             previewBytes = fileBytes
 
             if (fileBytes == null) {
                 tvArchivoDni.text = "No se pudo cargar la vista previa"
-                return@launch
-            }
-
-            val bitmap = BitmapFactory.decodeByteArray(fileBytes, 0, fileBytes.size)
-            if (bitmap != null) {
-                ivDniPreview.setImageBitmap(bitmap)
-                ivDniPreview.visibility = ImageView.VISIBLE
-                tvArchivoDni.text = identificationCardPath
             } else {
-                tvArchivoDni.text = "Vista previa no disponible"
+                val bitmap = BitmapFactory.decodeByteArray(fileBytes, 0, fileBytes.size)
+
+                if (bitmap != null) {
+                    ivDniPreview.setImageBitmap(bitmap)
+                    ivDniPreview.visibility = ImageView.VISIBLE
+                    tvArchivoDni.text = identificationCardPath
+                } else {
+                    tvArchivoDni.text = "Vista previa no disponible"
+                }
             }
         }
     }
 
-    private suspend fun fetchFileBytesFromServer(storedFileName: String): ByteArray? {
-        return withContext(Dispatchers.IO) {
-            Socket("10.0.2.2", 5000).use { socket ->
-                val input = DataInputStream(socket.getInputStream())
-                val output = DataOutputStream(socket.getOutputStream())
+    private fun descargarDni() {
+        if (identificationCardPath.isBlank()) {
+            tvArchivoDni.text = "No hay documento disponible"
+        } else {
+            tvArchivoDni.text = "Descargando documento..."
 
-                output.writeUTF("DOWNLOAD")
-                output.writeUTF(storedFileName)
-                output.flush()
+            lifecycleScope.launch {
+                val fileBytes = previewBytes ?: descargarBytesServidor(identificationCardPath)
+                val downloadedFile = guardarArchivoDescargado(identificationCardPath, fileBytes)
 
-                val exists = input.readBoolean()
-                if (!exists) {
-                    return@withContext null
+                if (downloadedFile != null) {
+                    tvArchivoDni.text = "Documento descargado: ${downloadedFile.name}"
+                } else {
+                    tvArchivoDni.text = "Error al descargar el documento"
                 }
+            }
+        }
+    }
 
-                val size = input.readLong()
-                val buffer = ByteArrayOutputStream()
+    private suspend fun descargarBytesServidor(storedFileName: String): ByteArray? {
+        return withContext(Dispatchers.IO) {
+            try {
+                Socket("10.0.2.2", 5000).use { socket ->
+                    val input = DataInputStream(socket.getInputStream())
+                    val output = DataOutputStream(socket.getOutputStream())
 
-                var remaining = size
-                while (remaining > 0) {
-                    val b = input.read()
-                    if (b == -1) {
-                        throw IllegalStateException("Stream ended early during download")
+                    output.writeUTF("DOWNLOAD")
+                    output.writeUTF(storedFileName)
+                    output.flush()
+
+                    val exists = input.readBoolean()
+
+                    if (!exists) {
+                        null
+                    } else {
+                        val fileSize = input.readLong()
+                        val buffer = ByteArrayOutputStream()
+                        var remaining = fileSize
+
+                        while (remaining > 0) {
+                            val byteRead = input.read()
+
+                            if (byteRead == -1) {
+                                throw IllegalStateException("La descarga se ha interrumpido antes de tiempo")
+                            }
+
+                            buffer.write(byteRead)
+                            remaining--
+                        }
+
+                        buffer.toByteArray()
                     }
-                    buffer.write(b)
-                    remaining--
                 }
-
-                buffer.toByteArray()
+            } catch (e: Exception) {
+                null
             }
         }
     }
 
-    private suspend fun saveDownloadedFile(storedFileName: String, fileBytes: ByteArray?): File? {
-        if (fileBytes == null) {
-            return null
-        }
-
+    private suspend fun guardarArchivoDescargado(storedFileName: String, fileBytes: ByteArray?): File? {
         return withContext(Dispatchers.IO) {
-            val downloadsDir = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS) ?: filesDir
-            val targetFile = File(downloadsDir, storedFileName)
+            if (fileBytes == null) {
+                null
+            } else {
+                try {
+                    val downloadsDir = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS) ?: filesDir
+                    val targetFile = File(downloadsDir, storedFileName)
 
-            FileOutputStream(targetFile).use { fos ->
-                fos.write(fileBytes)
-                fos.flush()
+                    FileOutputStream(targetFile).use { outputStream ->
+                        outputStream.write(fileBytes)
+                        outputStream.flush()
+                    }
+
+                    targetFile
+                } catch (e: Exception) {
+                    null
+                }
             }
-
-            targetFile
         }
     }
 }
