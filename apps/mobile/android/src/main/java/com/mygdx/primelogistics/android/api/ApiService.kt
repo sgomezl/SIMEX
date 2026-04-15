@@ -2,6 +2,7 @@ package com.mygdx.primelogistics.android.api
 
 import com.mygdx.primelogistics.android.models.LoginRequest
 import com.mygdx.primelogistics.android.models.LoginResponse
+import com.mygdx.primelogistics.android.models.Operation
 import com.mygdx.primelogistics.android.models.User
 import retrofit2.Response
 import retrofit2.http.Body
@@ -15,4 +16,7 @@ interface ApiService {
 
     @GET("api/auth/me")
     suspend fun getMe(@Header("Authorization") authorization: String): Response<User>
+
+    @GET("api/operations/user-operations")
+    suspend fun getUserOperations(): Response<List<Operation>>
 }

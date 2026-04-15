@@ -9,7 +9,7 @@ import com.mygdx.primelogistics.R
 import com.mygdx.primelogistics.android.models.Operation
 
 class OpAdapter(
-    private val operations: MutableList<Operation>,
+    private var operations: MutableList<Operation>,
     private val onCardClick: (Operation) -> Unit
 ) : RecyclerView.Adapter<OpAdapter.ViewHolder>() {
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -29,9 +29,15 @@ class OpAdapter(
         val context = holder.itemView.context
 
         holder.opIdentification.text = operation.id.toString()
-        holder.opOrigin.text = operation.originPort
-        holder.opDestination.text = operation.destinationPort
+        holder.opOrigin.text = operation.originPortId.toString()
+        holder.opDestination.text = operation.destinationPortId.toString()
+
         holder.itemView.setOnClickListener { onCardClick(operation) }
+    }
+
+    fun updateData(newList: List<Operation>) {
+        this.operations = newList.toMutableList()
+        notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int = operations.size

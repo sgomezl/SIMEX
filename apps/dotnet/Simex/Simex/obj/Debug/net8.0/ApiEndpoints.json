@@ -46,6 +46,26 @@
     ]
   },
   {
+    "ContainingType": "Simex.Controllers.OperationsController",
+    "Method": "GetUserOperations",
+    "RelativePath": "api/operations/user-operations",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[Simex.Dtos.OperationDto, Simex, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "Simex.Controllers.WeatherForecastController",
     "Method": "Get",
     "RelativePath": "WeatherForecast",

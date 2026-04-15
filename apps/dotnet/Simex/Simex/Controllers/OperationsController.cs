@@ -2,8 +2,8 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Simex.Dtos;
 using Simex.Models;
-// using Simex.Dtos.Operations;
 
 namespace Simex.Controllers;
 
@@ -19,9 +19,10 @@ public class OperationsController : ControllerBase
         _context = context;
     }
 
-    [HttpGet("my-operations")]
-    public async Task<ActionResult<IEnumerable<OperationDto>>> GetMyOperations()
+    [HttpGet("user-operations")]
+    public async Task<ActionResult<IEnumerable<OperationDto>>> GetUserOperations()
     {
+        // extracción del ID del usuario del token
         var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
         if (!int.TryParse(userIdClaim, out var userId))
@@ -29,11 +30,21 @@ public class OperationsController : ControllerBase
             return Unauthorized(new { message = "Token invalido." });
         }
 
+        // AsNoTracking(): solo vamos a leer, esto hace la consulta más rápida
+        var user = await _context.Users
+            .AsNoTracking()
+            .FirstOrDefaultAsync(u => u.Id == userId);
+
+        if (user == null || user.CompanyId == null)
+        {
+            return Ok(new List<OperationDto>());
+        }
+
         var operations = await _context.Operations
-            .Where(op => op.DOCUMENT_USER_ID == userId)
+            .Where(op => op.NavieraId == user.CompanyId)
             .ToListAsync();
 
-        if (operations == null || !operations.Any())
+        if (!operations.Any())
         {
             return Ok(new List<OperationDto>());
         }
@@ -41,10 +52,14 @@ public class OperationsController : ControllerBase
         var operationsDto = operations.Select(op => new OperationDto
         {
             Id = op.Id,
-            DocumentUserId = op.DOCUMENT_USER_ID,
-            // Description = op.Description,
-            // Status = op.Status,
-            // Date = op.Date
+            OriginPortId = op.OriginPortId,
+            DestinationPortId = op.DestinationPortId,
+            TotalCost = op.TotalCost,
+            Etd = op.Etd,
+            Eta = op.Eta,
+            IncotermId = op.IncotermId,
+            PiecesNumber = op.PiecesNumber,
+            Kilograms = op.Kilograms
         }).ToList();
 
         return Ok(operationsDto);

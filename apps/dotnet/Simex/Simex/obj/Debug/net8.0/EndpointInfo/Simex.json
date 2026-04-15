@@ -82,6 +82,44 @@
         }
       }
     },
+    "/api/operations/user-operations": {
+      "get": {
+        "tags": [
+          "Operations"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OperationDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OperationDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OperationDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/WeatherForecast": {
       "get": {
         "tags": [
@@ -165,6 +203,52 @@
           "password": {
             "type": "string",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OperationDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "originPortId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "destinationPortId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalCost": {
+            "type": "number",
+            "format": "double"
+          },
+          "etd": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "eta": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "incotermId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "piecesNumber": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "kilograms": {
+            "type": "number",
+            "format": "double"
           }
         },
         "additionalProperties": false

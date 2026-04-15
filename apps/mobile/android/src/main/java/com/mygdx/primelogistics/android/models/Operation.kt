@@ -1,16 +1,14 @@
 
 package com.mygdx.primelogistics.android.models
 
-import java.time.LocalDateTime
-
 data class Operation (
     val id: Int,
-    val originPort: String,
-    val destinationPort: String,
+    val originPortId: Int,
+    val destinationPortId: Int,
     val totalCost: Double,
-    val etd: LocalDateTime,
-    val eta: LocalDateTime,
+    val etd: String,
+    val eta: String,
     val incotermId: Int,
-    val pkgQuantity: Int,
-    val totalWeight: Double
+    val piecesNumber: Int,
+    val kilograms: Double
 )
