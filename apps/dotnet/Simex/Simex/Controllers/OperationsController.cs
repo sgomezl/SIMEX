@@ -22,38 +22,62 @@ public class OperationsController : ControllerBase
     [HttpGet("user-operations")]
     public async Task<ActionResult<IEnumerable<OperationDto>>> GetUserOperations()
     {
-        // extracción del ID del usuario del token
         var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (!int.TryParse(userIdClaim, out var userId)) return Unauthorized(new { message = "Token invalido." });
 
-        if (!int.TryParse(userIdClaim, out var userId))
-        {
-            return Unauthorized(new { message = "Token invalido." });
-        }
-
-        // AsNoTracking(): solo vamos a leer, esto hace la consulta más rápida
-        var user = await _context.Users
-            .AsNoTracking()
-            .FirstOrDefaultAsync(u => u.Id == userId);
-
-        if (user == null || user.CompanyId == null)
-        {
-            return Ok(new List<OperationDto>());
-        }
+        var user = await _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == userId);
+        if (user == null || user.CompanyId == null) return Ok(new List<OperationDto>());
 
         var operations = await _context.Operations
+            .AsNoTracking()
+            .Include(op => op.OriginPort)
+            .Include(op => op.DestinationPort)
             .Where(op => op.NavieraId == user.CompanyId)
             .ToListAsync();
-
-        if (!operations.Any())
-        {
-            return Ok(new List<OperationDto>());
-        }
 
         var operationsDto = operations.Select(op => new OperationDto
         {
             Id = op.Id,
-            OriginPortId = op.OriginPortId,
-            DestinationPortId = op.DestinationPortId,
+            OrderReference = op.OrderReference,
+            OriginPortName = op.OriginPort?.Name ?? "Puerto Desconocido",
+            DestinationPortName = op.DestinationPort?.Name ?? "Puerto Desconocido",
+            TotalCost = op.TotalCost,
+            Etd = op.Etd,
+            Eta = op.Eta,
+            IncotermId = op.IncotermId,
+            PiecesNumber = op.PiecesNumber,
+            Kilograms = op.Kilograms
+        }).ToList();
+
+        return Ok(operationsDto);
+    }
+
+    [HttpGet("recent")]
+    public async Task<ActionResult<IEnumerable<OperationDto>>> GetRecentOperations()
+    {
+        var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (!int.TryParse(userIdClaim, out var userId)) return Unauthorized(new { message = "Token inválido." });
+
+        var user = await _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == userId);
+        if (user == null || user.CompanyId == null) return Ok(new List<OperationDto>());
+
+        DateTime haceSieteDias = DateTime.Now.AddDays(-7);
+        DateTime hoy = DateTime.Now;
+
+        var operations = await _context.Operations
+            .AsNoTracking()
+            .Include(op => op.OriginPort)
+            .Include(op => op.DestinationPort)
+            .Where(op => op.NavieraId == user.CompanyId && op.Etd >= haceSieteDias && op.Etd <= hoy)
+            .OrderByDescending(op => op.Etd)
+            .ToListAsync();
+
+        var operationsDto = operations.Select(op => new OperationDto
+        {
+            Id = op.Id,
+            OrderReference = op.OrderReference,
+            OriginPortName = op.OriginPort?.Name ?? "Puerto Desconocido",
+            DestinationPortName = op.DestinationPort?.Name ?? "Puerto Desconocido",
             TotalCost = op.TotalCost,
             Etd = op.Etd,
             Eta = op.Eta,

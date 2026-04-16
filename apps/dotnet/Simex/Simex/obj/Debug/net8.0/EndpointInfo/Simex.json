@@ -120,6 +120,44 @@
         }
       }
     },
+    "/api/operations/recent": {
+      "get": {
+        "tags": [
+          "Operations"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OperationDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OperationDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OperationDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/WeatherForecast": {
       "get": {
         "tags": [
@@ -214,13 +252,17 @@
             "type": "integer",
             "format": "int32"
           },
-          "originPortId": {
-            "type": "integer",
-            "format": "int32"
+          "orderReference": {
+            "type": "string",
+            "nullable": true
           },
-          "destinationPortId": {
-            "type": "integer",
-            "format": "int32"
+          "originPortName": {
+            "type": "string",
+            "nullable": true
+          },
+          "destinationPortName": {
+            "type": "string",
+            "nullable": true
           },
           "totalCost": {
             "type": "number",

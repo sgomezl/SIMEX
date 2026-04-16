@@ -3,32 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\msi\\Documents\\GitHub\\SIMEX\\apps\\dotnet\\Simex\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{7C7B7B8D-FDFA-409A-9A68-E653FFDC030E}|Simex\\Simex.csproj|c:\\users\\msi\\documents\\github\\simex\\apps\\dotnet\\simex\\simex\\models\\simex04context.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7C7B7B8D-FDFA-409A-9A68-E653FFDC030E}|Simex\\Simex.csproj|solutionrelative:simex\\models\\simex04context.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7C7B7B8D-FDFA-409A-9A68-E653FFDC030E}|Simex\\Simex.csproj|c:\\users\\msi\\documents\\github\\simex\\apps\\dotnet\\simex\\simex\\models\\operation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7C7B7B8D-FDFA-409A-9A68-E653FFDC030E}|Simex\\Simex.csproj|solutionrelative:simex\\models\\operation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7C7B7B8D-FDFA-409A-9A68-E653FFDC030E}|Simex\\Simex.csproj|c:\\users\\msi\\documents\\github\\simex\\apps\\dotnet\\simex\\simex\\controllers\\operationscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7C7B7B8D-FDFA-409A-9A68-E653FFDC030E}|Simex\\Simex.csproj|solutionrelative:simex\\controllers\\operationscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{7C7B7B8D-FDFA-409A-9A68-E653FFDC030E}|Simex\\Simex.csproj|c:\\users\\msi\\documents\\github\\simex\\apps\\dotnet\\simex\\simex\\simex.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}",
       "RelativeMoniker": "D:0:0:{7C7B7B8D-FDFA-409A-9A68-E653FFDC030E}|Simex\\Simex.csproj|solutionrelative:simex\\simex.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7C7B7B8D-FDFA-409A-9A68-E653FFDC030E}|Simex\\Simex.csproj|c:\\users\\msi\\documents\\github\\simex\\apps\\dotnet\\simex\\simex\\controllers\\operationscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7C7B7B8D-FDFA-409A-9A68-E653FFDC030E}|Simex\\Simex.csproj|solutionrelative:simex\\controllers\\operationscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{7C7B7B8D-FDFA-409A-9A68-E653FFDC030E}|Simex\\Simex.csproj|c:\\users\\msi\\documents\\github\\simex\\apps\\dotnet\\simex\\simex\\dtos\\operationdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7C7B7B8D-FDFA-409A-9A68-E653FFDC030E}|Simex\\Simex.csproj|solutionrelative:simex\\dtos\\operationdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7C7B7B8D-FDFA-409A-9A68-E653FFDC030E}|Simex\\Simex.csproj|c:\\users\\msi\\documents\\github\\simex\\apps\\dotnet\\simex\\simex\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7C7B7B8D-FDFA-409A-9A68-E653FFDC030E}|Simex\\Simex.csproj|solutionrelative:simex\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7C7B7B8D-FDFA-409A-9A68-E653FFDC030E}|Simex\\Simex.csproj|c:\\users\\msi\\documents\\github\\simex\\apps\\dotnet\\simex\\simex\\dtos\\auth\\authdtos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7C7B7B8D-FDFA-409A-9A68-E653FFDC030E}|Simex\\Simex.csproj|solutionrelative:simex\\dtos\\auth\\authdtos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7C7B7B8D-FDFA-409A-9A68-E653FFDC030E}|Simex\\Simex.csproj|c:\\users\\msi\\documents\\github\\simex\\apps\\dotnet\\simex\\simex\\models\\operation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7C7B7B8D-FDFA-409A-9A68-E653FFDC030E}|Simex\\Simex.csproj|solutionrelative:simex\\models\\operation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -38,7 +26,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 6,
           "Children": [
             {
               "$type": "Bookmark",
@@ -58,92 +46,54 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Simex04Context.cs",
-              "DocumentMoniker": "C:\\Users\\msi\\Documents\\GitHub\\SIMEX\\apps\\dotnet\\Simex\\Simex\\Models\\Simex04Context.cs",
-              "RelativeDocumentMoniker": "Simex\\Models\\Simex04Context.cs",
-              "ToolTip": "C:\\Users\\msi\\Documents\\GitHub\\SIMEX\\apps\\dotnet\\Simex\\Simex\\Models\\Simex04Context.cs*",
-              "RelativeToolTip": "Simex\\Models\\Simex04Context.cs*",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-14T15:24:02.481Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "Simex.http",
               "DocumentMoniker": "C:\\Users\\msi\\Documents\\GitHub\\SIMEX\\apps\\dotnet\\Simex\\Simex\\Simex.http",
               "RelativeDocumentMoniker": "Simex\\Simex.http",
-              "ToolTip": "C:\\Users\\msi\\Documents\\GitHub\\SIMEX\\apps\\dotnet\\Simex\\Simex\\Simex.http",
-              "RelativeToolTip": "Simex\\Simex.http",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAAAAAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\msi\\Documents\\GitHub\\SIMEX\\apps\\dotnet\\Simex\\Simex\\Simex.http*",
+              "RelativeToolTip": "Simex\\Simex.http*",
+              "ViewState": "AgIAABgAAAAAAAAAAAAYwB8AAAArAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003502|",
               "WhenOpened": "2026-04-14T13:58:16.823Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "AuthDtos.cs",
-              "DocumentMoniker": "C:\\Users\\msi\\Documents\\GitHub\\SIMEX\\apps\\dotnet\\Simex\\Simex\\Dtos\\Auth\\AuthDtos.cs",
-              "RelativeDocumentMoniker": "Simex\\Dtos\\Auth\\AuthDtos.cs",
-              "ToolTip": "C:\\Users\\msi\\Documents\\GitHub\\SIMEX\\apps\\dotnet\\Simex\\Simex\\Dtos\\Auth\\AuthDtos.cs",
-              "RelativeToolTip": "Simex\\Dtos\\Auth\\AuthDtos.cs",
-              "ViewState": "AgIAAA0AAAAAAAAAAAAkwAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-13T17:18:15.478Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 2,
               "Title": "OperationDto.cs",
               "DocumentMoniker": "C:\\Users\\msi\\Documents\\GitHub\\SIMEX\\apps\\dotnet\\Simex\\Simex\\Dtos\\OperationDto.cs",
               "RelativeDocumentMoniker": "Simex\\Dtos\\OperationDto.cs",
               "ToolTip": "C:\\Users\\msi\\Documents\\GitHub\\SIMEX\\apps\\dotnet\\Simex\\Simex\\Dtos\\OperationDto.cs",
               "RelativeToolTip": "Simex\\Dtos\\OperationDto.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAyAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-04-13T14:44:25.024Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 0,
               "Title": "OperationsController.cs",
               "DocumentMoniker": "C:\\Users\\msi\\Documents\\GitHub\\SIMEX\\apps\\dotnet\\Simex\\Simex\\Controllers\\OperationsController.cs",
               "RelativeDocumentMoniker": "Simex\\Controllers\\OperationsController.cs",
               "ToolTip": "C:\\Users\\msi\\Documents\\GitHub\\SIMEX\\apps\\dotnet\\Simex\\Simex\\Controllers\\OperationsController.cs",
               "RelativeToolTip": "Simex\\Controllers\\OperationsController.cs",
-              "ViewState": "AgIAACoAAAAAAAAAAAAYwDgAAAAlAAAAAAAAAA==",
+              "ViewState": "AgIAAFEAAAAAAAAAAAAqwFcAAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-04-13T12:26:58.105Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "Operation.cs",
               "DocumentMoniker": "C:\\Users\\msi\\Documents\\GitHub\\SIMEX\\apps\\dotnet\\Simex\\Simex\\Models\\Operation.cs",
               "RelativeDocumentMoniker": "Simex\\Models\\Operation.cs",
               "ToolTip": "C:\\Users\\msi\\Documents\\GitHub\\SIMEX\\apps\\dotnet\\Simex\\Simex\\Models\\Operation.cs",
               "RelativeToolTip": "Simex\\Models\\Operation.cs",
-              "ViewState": "AgIAAGUAAAAAAAAAAAAmwF8AAAAzAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAF8AAAAzAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-13T11:48:43.864Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "AuthController.cs",
-              "DocumentMoniker": "C:\\Users\\msi\\Documents\\GitHub\\SIMEX\\apps\\dotnet\\Simex\\Simex\\Controllers\\AuthController.cs",
-              "RelativeDocumentMoniker": "Simex\\Controllers\\AuthController.cs",
-              "ToolTip": "C:\\Users\\msi\\Documents\\GitHub\\SIMEX\\apps\\dotnet\\Simex\\Simex\\Controllers\\AuthController.cs",
-              "RelativeToolTip": "Simex\\Controllers\\AuthController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAADkAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-13T10:52:45.536Z"
+              "WhenOpened": "2026-04-13T11:48:43.864Z"
             }
           ]
         }
