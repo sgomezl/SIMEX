@@ -29,6 +29,7 @@ class SubirDniActivity : AppCompatActivity() {
     private lateinit var btnHomeUsuario: ImageButton
     private lateinit var btnVolver: Button
     private lateinit var btnSubirDNI: ImageButton
+    private lateinit var sessionManager: SessionManager
     private lateinit var tvUserName: TextView
     private lateinit var tvCompanyName: TextView
     private lateinit var tvSelectedFile: TextView
@@ -42,6 +43,9 @@ class SubirDniActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_subir_dni)
+
+        sessionManager = SessionManager(this)
+        RetrofitClient.init { sessionManager.getAccessToken() }
 
         definirComponentes()
         leerDatosIntent()
@@ -192,11 +196,10 @@ class SubirDniActivity : AppCompatActivity() {
     }
 
     private suspend fun actualizarRutaDni(savedFileName: String): Boolean {
-        val token = SessionManager(this).getAccessToken() ?: return false
+        val token = sessionManager.getAccessToken() ?: return false
 
         return try {
             val response = RetrofitClient.api.updateIdentificationCardPath(
-                authorization = "Bearer $token",
                 request = UpdateIdentificationCardPathRequest(savedFileName)
             )
 

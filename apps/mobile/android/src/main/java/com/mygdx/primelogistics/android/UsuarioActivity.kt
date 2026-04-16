@@ -38,6 +38,7 @@ class UsuarioActivity : AppCompatActivity() {
 
 
         sessionManager = SessionManager(this)
+        RetrofitClient.init { sessionManager.getAccessToken() }
         defineComponents()
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.mainActivityUsuario)) { v, insets ->
