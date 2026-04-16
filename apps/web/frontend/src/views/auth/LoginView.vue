@@ -8,6 +8,7 @@
           alt="Logo Prime"
           class="mx-auto mb-8 w-80 h-auto object-contain"
         />
+
         <BaseInput
           v-model="username"
           id="username"
@@ -28,8 +29,7 @@
             :error="passwordError"
             class="w-full"
           />
-
-        <div class="pt-2">
+        </div> <div class="pt-2">
           <BaseCheckbox
             v-model="rememberMe"
             label="Recuérdame"
@@ -53,6 +53,7 @@ import { useRouter } from 'vue-router'
 
 import BaseInput from '@components/base/BaseInput.vue'
 import BaseButton from '@components/base/BaseButton.vue'
+import BaseCheckbox from '@components/base/BaseCheckbox.vue' // ✅ SOLUCIÓN 3: Faltaba importar el componente
 import logoPrime from '@/assets/images/logoPrime.webp'
 
 const router = useRouter()
@@ -60,10 +61,10 @@ const router = useRouter()
 const username = ref('')
 const password = ref('')
 const showPassword = ref(false)
-// const rememberMe = ref(false)
+const rememberMe = ref(false) // ✅ SOLUCIÓN 2: Descomentado para que funcione el v-model
 
-  const usernameError = ref('')
-  const passwordError = ref('')
+const usernameError = ref('')
+const passwordError = ref('')
 
 async function onSubmit() {
   usernameError.value = ''
@@ -77,9 +78,9 @@ async function onSubmit() {
     passwordError.value = 'La contraseña es requerida.'
   }
 
-    if (usernameError.value || passwordError.value) {
-      return
-    }
+  if (usernameError.value || passwordError.value) {
+    return
+  }
 
   try {
     const response = await api.post('/login', {
