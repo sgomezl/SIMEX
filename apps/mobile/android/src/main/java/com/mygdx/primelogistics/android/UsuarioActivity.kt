@@ -27,6 +27,7 @@ class UsuarioActivity : AppCompatActivity() {
     private lateinit var tvUserName: TextView
     private lateinit var tvCompanyName: TextView
     private lateinit var tvEmail: TextView
+    private lateinit var btnHomeUsuario: ImageButton
     private lateinit var btnLogout: ImageButton
     private lateinit var btnIdentificationCard: Button
 
@@ -51,6 +52,11 @@ class UsuarioActivity : AppCompatActivity() {
             finish()
         }
 
+        btnHomeUsuario.setOnClickListener {
+            startActivity(Intent(this, ClientHomeActivity::class.java))
+            finish()
+        }
+
         btnIdentificationCard.setOnClickListener {
             val intent = if (currentIdentificationCardPath.isBlank()) {
                 Intent(this, SubirDniActivity::class.java)
@@ -72,6 +78,7 @@ class UsuarioActivity : AppCompatActivity() {
         tvUserName = findViewById(R.id.tvUserName)
         tvCompanyName = findViewById(R.id.tvCompanyName)
         tvEmail = findViewById(R.id.tvEmail)
+        btnHomeUsuario = findViewById(R.id.btnHomeUsuario)
         btnLogout = findViewById(R.id.btnLogout)
         btnIdentificationCard = findViewById(R.id.btnIdentificationCard)
     }
