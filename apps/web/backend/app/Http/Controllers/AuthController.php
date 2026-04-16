@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\DTOs\loginDTO;
+use App\DTOs\LoginDTO;
 use App\DTOs\UserDTO;
 use App\Models\User;
 use Illuminate\Http\Request;
