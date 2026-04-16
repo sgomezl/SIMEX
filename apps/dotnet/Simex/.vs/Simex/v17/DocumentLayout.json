@@ -7,6 +7,14 @@
       "RelativeMoniker": "D:0:0:{7C7B7B8D-FDFA-409A-9A68-E653FFDC030E}|Simex\\Simex.csproj|solutionrelative:simex\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{7C7B7B8D-FDFA-409A-9A68-E653FFDC030E}|Simex\\Simex.csproj|c:\\users\\chaox\\documents\\github\\simex\\apps\\dotnet\\simex\\simex\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{7C7B7B8D-FDFA-409A-9A68-E653FFDC030E}|Simex\\Simex.csproj|solutionrelative:simex\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7C7B7B8D-FDFA-409A-9A68-E653FFDC030E}|Simex\\Simex.csproj|c:\\users\\chaox\\documents\\github\\simex\\apps\\dotnet\\simex\\simex\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{7C7B7B8D-FDFA-409A-9A68-E653FFDC030E}|Simex\\Simex.csproj|solutionrelative:simex\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{7C7B7B8D-FDFA-409A-9A68-E653FFDC030E}|Simex\\Simex.csproj|c:\\users\\chaox\\documents\\github\\simex\\apps\\dotnet\\simex\\simex\\dtos\\auth\\authdtos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7C7B7B8D-FDFA-409A-9A68-E653FFDC030E}|Simex\\Simex.csproj|solutionrelative:simex\\dtos\\auth\\authdtos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -26,7 +34,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 7,
           "Children": [
             {
               "$type": "Bookmark",
@@ -47,6 +55,32 @@
             {
               "$type": "Document",
               "DocumentIndex": 1,
+              "Title": "appsettings.Development.json",
+              "DocumentMoniker": "C:\\Users\\chaox\\Documents\\GitHub\\SIMEX\\apps\\dotnet\\Simex\\Simex\\appsettings.Development.json",
+              "RelativeDocumentMoniker": "Simex\\appsettings.Development.json",
+              "ToolTip": "C:\\Users\\chaox\\Documents\\GitHub\\SIMEX\\apps\\dotnet\\Simex\\Simex\\appsettings.Development.json",
+              "RelativeToolTip": "Simex\\appsettings.Development.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAADAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-04-15T14:50:50.836Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\chaox\\Documents\\GitHub\\SIMEX\\apps\\dotnet\\Simex\\Simex\\appsettings.json",
+              "RelativeDocumentMoniker": "Simex\\appsettings.json",
+              "ToolTip": "C:\\Users\\chaox\\Documents\\GitHub\\SIMEX\\apps\\dotnet\\Simex\\Simex\\appsettings.json",
+              "RelativeToolTip": "Simex\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-04-15T14:50:31.683Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "AuthDtos.cs",
               "DocumentMoniker": "C:\\Users\\chaox\\Documents\\GitHub\\SIMEX\\apps\\dotnet\\Simex\\Simex\\Dtos\\Auth\\AuthDtos.cs",
               "RelativeDocumentMoniker": "Simex\\Dtos\\Auth\\AuthDtos.cs",
@@ -54,8 +88,7 @@
               "RelativeToolTip": "Simex\\Dtos\\Auth\\AuthDtos.cs",
               "ViewState": "AgIAAAUAAAAAAAAAAAAgwBIAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-14T13:31:14.27Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-14T13:31:14.27Z"
             },
             {
               "$type": "Document",
@@ -65,14 +98,14 @@
               "RelativeDocumentMoniker": "Simex\\Controllers\\AuthController.cs",
               "ToolTip": "C:\\Users\\chaox\\Documents\\GitHub\\SIMEX\\apps\\dotnet\\Simex\\Simex\\Controllers\\AuthController.cs",
               "RelativeToolTip": "Simex\\Controllers\\AuthController.cs",
-              "ViewState": "AgIAAH8AAAAAAAAAAAAYwJ0AAAAFAAAAAAAAAA==",
+              "ViewState": "AgIAAOMAAAAAAAAAAAAkwJUAAABQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-04-08T14:30:20.248Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": "Simex.http",
               "DocumentMoniker": "C:\\Users\\chaox\\Documents\\GitHub\\SIMEX\\apps\\dotnet\\Simex\\Simex\\Simex.http",
               "RelativeDocumentMoniker": "Simex\\Simex.http",
@@ -80,12 +113,11 @@
               "RelativeToolTip": "Simex\\Simex.http",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003502|",
-              "WhenOpened": "2026-04-08T14:30:00.066Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-08T14:30:00.066Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 5,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\chaox\\Documents\\GitHub\\SIMEX\\apps\\dotnet\\Simex\\Simex\\Program.cs",
               "RelativeDocumentMoniker": "Simex\\Program.cs",
@@ -93,8 +125,7 @@
               "RelativeToolTip": "Simex\\Program.cs",
               "ViewState": "AgIAACIAAAAAAAAAAIAwwDEAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-08T14:29:55.538Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-08T14:29:55.538Z"
             }
           ]
         }
