@@ -160,9 +160,9 @@ import type { Incoterm } from '@interfaces/incoterm/incoterm';
 import type { Port } from '@interfaces/catalogs/port';
 import type { ContainerType } from '@interfaces/catalogs/containerType';
 import type { PackageType } from '@interfaces/catalogs/packageType';
-import type { CurrencyType } from '@/interfaces/catalogs/currencyTypes';
-import type { SendType } from '@/interfaces/costs/sendType';
-import type { CostType } from '@/interfaces/costs/costType';
+import type { CurrencyType } from '@interfaces/catalogs/currencyTypes';
+import type { SendType } from '@interfaces/costs/sendType';
+import type { CostType } from '@interfaces/costs/costType';
 
 const props = defineProps({
   isOpen: { type: Boolean, required: true },

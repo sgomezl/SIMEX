@@ -79,8 +79,9 @@ import api from '@services/api';
 import BaseButton from '@components/base/BaseButton.vue';
 import BaseInput from '@components/base/BaseInput.vue';
 import CompanyModal from '@components/modals/CompanyModal.vue';
+import { Company } from '@interfaces/companies/company'
 
-const companies = ref([]);
+const companies = ref<Company[]>([]);
 const searchQuery = ref('');
 const isModalOpen = ref(false);
 const companyToEdit = ref(null);
@@ -90,7 +91,6 @@ const filteredCompanies = computed(() => {
   if (!query) return companies.value;
 
   return companies.value.filter(company => {
-    // Usamos el optional chaining (?.) por si name o nif vienen null
     const nameMatch = company.name?.toLowerCase().includes(query);
     const nifMatch = company.nif?.toLowerCase().includes(query);
     return nameMatch || nifMatch;
@@ -146,7 +146,7 @@ async function saveCompany(formData) {
   }
 };
 
-async function deleteCompany(id) {
+async function deleteCompany(id: number) {
   if (confirm('¿Estás seguro de que quieres eliminar esta empresa?')) {
     try {
       await api.delete(`/company/${id}`, getAuthConfig());
