@@ -39,7 +39,7 @@ class ClientHomeActivity : AppCompatActivity() {
         recyclerRecent.layoutManager = LinearLayoutManager(this)
 
         adapterRecent = OpAdapter(operations) { operation ->
-            // Click listener
+            startActivity(DetalleOperacionActivity.createIntent(this, operation))
         }
         recyclerRecent.adapter = adapterRecent
 
