@@ -40,7 +40,7 @@ class AllOperationsActivity : AppCompatActivity() {
         recyclerAllOps.layoutManager = LinearLayoutManager(this)
 
         adapterAllOps = OpAdapter(operations) { operation ->
-            // Click listener
+            startActivity(DetalleOperacionActivity.createIntent(this, operation))
         }
         recyclerAllOps.adapter = adapterAllOps
 

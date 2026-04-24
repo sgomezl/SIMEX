@@ -44,26 +44,25 @@ class ClientHomeActivity : AppCompatActivity() {
         recyclerRecent = findViewById(R.id.rvRecent)
         recyclerRecent.layoutManager = LinearLayoutManager(this)
         adapterRecent = OpAdapter(operations) { operation ->
-            val intent = Intent(this, PropuestaActivity::class.java)
-            intent.putExtra("OPERATION_ID", operation.id)
-            startActivity(intent)
+            startActivity(DetalleOperacionActivity.createIntent(this, operation))
         }
         recyclerRecent.adapter = adapterRecent
 
         recyclerProp = findViewById(R.id.rvProp)
         recyclerProp.layoutManager = LinearLayoutManager(this)
         adapterProp = PropAdapter(operations) { operation ->
-            val intent = Intent(this, PropuestaActivity::class.java)
-            intent.putExtra("OPERATION_ID", operation.id)
-            startActivity(intent)
+            startActivity(PropuestaActivity.createIntent(this, operation))
         }
         recyclerProp.adapter = adapterProp
-
-        loadData()
 
         findViewById<ImageButton>(R.id.btnUser).setOnClickListener {
             startActivity(Intent(this, UsuarioActivity::class.java))
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        loadData()
     }
 
     private fun loadData() {

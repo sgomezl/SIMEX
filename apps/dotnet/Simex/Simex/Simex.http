@@ -38,6 +38,11 @@ Content-Type: application/json
 }
 ###
 
+POST {{Simex_HostAddress}}/api/operations/{{operationId}}/accept
+Authorization: Bearer {{token}}
+Accept: application/json
+###
+
 GET {{Simex_HostAddress}}/api/operations/user-operations
 Authorization: Bearer {{token}}
 Accept: application/json
