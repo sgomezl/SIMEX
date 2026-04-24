@@ -39,7 +39,9 @@ class ClientHomeActivity : AppCompatActivity() {
         recyclerRecent.layoutManager = LinearLayoutManager(this)
 
         adapterRecent = OpAdapter(operations) { operation ->
-            startActivity(DetalleOperacionActivity.createIntent(this, operation))
+            val intent = Intent(this, PropuestaActivity::class.java)
+            intent.putExtra("OPERATION_ID", operation.id)
+            startActivity(intent)
         }
         recyclerRecent.adapter = adapterRecent
 
