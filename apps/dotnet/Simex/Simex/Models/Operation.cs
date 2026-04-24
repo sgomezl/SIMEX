@@ -89,6 +89,8 @@ public partial class Operation
 
     public virtual ICollection<Document> Documents { get; set; } = new List<Document>();
 
+    public virtual ICollection<Dua> Duas { get; set; } = new List<Dua>();
+
     public virtual Company Exportator { get; set; } = null!;
 
     public virtual Company? Importer { get; set; }
@@ -98,6 +100,8 @@ public partial class Operation
     public virtual Company Naviera { get; set; } = null!;
 
     public virtual ICollection<Notification> Notifications { get; set; } = new List<Notification>();
+
+    public virtual ICollection<OperationStateHistory> OperationStateHistories { get; set; } = new List<OperationStateHistory>();
 
     public virtual User OperationUser { get; set; } = null!;
 
