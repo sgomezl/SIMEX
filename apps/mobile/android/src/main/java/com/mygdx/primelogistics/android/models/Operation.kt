@@ -9,7 +9,7 @@ data class Operation (
     val totalCost: Double,
     val etd: String,
     val eta: String,
-    val incotermId: Int?,
+    val incotermCode: String,
     val piecesNumber: Int?,
     val kilograms: Double,
     val statusName: String?
