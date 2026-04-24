@@ -18,7 +18,11 @@
           <span class="material-symbols-outlined text-3xl">{{ item.icon }}</span>
         </div>
       </router-link>
+<<<<<<< HEAD
 </nav>
+=======
+     </nav>
+>>>>>>> 0fa9df0 (Minor changes)
     </aside>
 
     <div class="flex-1 flex flex-col min-w-0">
