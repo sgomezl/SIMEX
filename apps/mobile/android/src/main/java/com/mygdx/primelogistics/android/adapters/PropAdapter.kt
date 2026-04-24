@@ -7,12 +7,15 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.mygdx.primelogistics.R
 import com.mygdx.primelogistics.android.models.Operation
+import java.text.NumberFormat
+import java.util.Locale
 
 class PropAdapter(
     private var allOperations: List<Operation>,
     private val onCardClick: (Operation) -> Unit
 ) : RecyclerView.Adapter<PropAdapter.ViewHolder>() {
 
+    private val euroFormatter = NumberFormat.getCurrencyInstance(Locale("es", "ES"))
     private var displayList: List<Operation> = allOperations.filter { it.statusName == "Pendiente" }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -34,7 +37,7 @@ class PropAdapter(
         holder.propReference.text = prop.orderReference
         holder.propOrigin.text = prop.originPortName
         holder.propDestination.text = prop.destinationPortName
-        holder.propCost.text = prop.totalCost.toString()
+        holder.propCost.text = euroFormatter.format(prop.totalCost)
         holder.itemView.setOnClickListener { onCardClick(prop) }
     }
 
