@@ -30,11 +30,20 @@
 
         <activity
             android:name="com.mygdx.primelogistics.android.ClientHomeActivity"
-            android:exported="true">
+            android:exported="false">
+        </activity>
+
+        <activity
+            android:name="com.mygdx.primelogistics.android.AgentHomeActivity"
+            android:exported="false">
         </activity>
 
         <activity
             android:name="com.mygdx.primelogistics.android.UsuarioActivity"
+            android:exported="false" />
+
+        <activity
+            android:name="com.mygdx.primelogistics.android.AllOperationsActivity"
             android:exported="false" />
 
         <activity

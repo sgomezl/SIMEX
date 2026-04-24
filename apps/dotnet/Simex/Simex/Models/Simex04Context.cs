@@ -49,6 +49,12 @@ public partial class Simex04Context : DbContext
 
     public virtual DbSet<DocumentType> DocumentTypes { get; set; }
 
+    public virtual DbSet<Dua> Duas { get; set; }
+
+    public virtual DbSet<DuaState> DuaStates { get; set; }
+
+    public virtual DbSet<DuaStateHistory> DuaStateHistories { get; set; }
+
     public virtual DbSet<FailedJob> FailedJobs { get; set; }
 
     public virtual DbSet<FlowType> FlowTypes { get; set; }
@@ -114,12 +120,8 @@ public partial class Simex04Context : DbContext
     public virtual DbSet<ValidationType> ValidationTypes { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        if (!optionsBuilder.IsConfigured)
-        {
-            throw new InvalidOperationException("Simex04Context must be configured through dependency injection.");
-        }
-    }
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Data Source=vps-5d4cfa08.vps.ovh.net;Initial Catalog=simex04;User ID=simex04;Password=xQlW}N6Rd40@;Encrypt=True;TrustServerCertificate=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -486,6 +488,115 @@ public partial class Simex04Context : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false)
                 .HasColumnName("NAME");
+        });
+
+        modelBuilder.Entity<Dua>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__DUA__3214EC279E4549FC");
+
+            entity.ToTable("DUA");
+
+            entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.CreateUserId).HasColumnName("CREATE_USER_ID");
+            entity.Property(e => e.CreationDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime")
+                .HasColumnName("CREATION_DATE");
+            entity.Property(e => e.Destination)
+                .HasMaxLength(255)
+                .IsUnicode(false)
+                .HasColumnName("DESTINATION");
+            entity.Property(e => e.DocumentNumber)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasColumnName("DOCUMENT_NUMBER");
+            entity.Property(e => e.DuaStateId).HasColumnName("DUA_STATE_ID");
+            entity.Property(e => e.GoodsLocation)
+                .HasMaxLength(255)
+                .IsUnicode(false)
+                .HasColumnName("GOODS_LOCATION");
+            entity.Property(e => e.GrossWeight)
+                .HasColumnType("decimal(10, 2)")
+                .HasColumnName("GROSS_WEIGHT");
+            entity.Property(e => e.OperationId).HasColumnName("OPERATION_ID");
+            entity.Property(e => e.Origin)
+                .HasMaxLength(255)
+                .IsUnicode(false)
+                .HasColumnName("ORIGIN");
+            entity.Property(e => e.PresentationDate)
+                .HasColumnType("datetime")
+                .HasColumnName("PRESENTATION_DATE");
+            entity.Property(e => e.SpecificDestination)
+                .HasMaxLength(255)
+                .IsUnicode(false)
+                .HasColumnName("SPECIFIC_DESTINATION");
+
+            entity.HasOne(d => d.CreateUser).WithMany(p => p.Duas)
+                .HasForeignKey(d => d.CreateUserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__DUA__CREATE_USER__0ABD916C");
+
+            entity.HasOne(d => d.DuaState).WithMany(p => p.Duas)
+                .HasForeignKey(d => d.DuaStateId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__DUA__DUA_STATE_I__09C96D33");
+
+            entity.HasOne(d => d.Operation).WithMany(p => p.Duas)
+                .HasForeignKey(d => d.OperationId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__DUA__OPERATION_I__08D548FA");
+        });
+
+        modelBuilder.Entity<DuaState>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__DUA_STAT__3214EC2774A7F331");
+
+            entity.ToTable("DUA_STATES");
+
+            entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.Description)
+                .HasMaxLength(255)
+                .IsUnicode(false)
+                .HasColumnName("DESCRIPTION");
+            entity.Property(e => e.Name)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("NAME");
+        });
+
+        modelBuilder.Entity<DuaStateHistory>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__DUA_STAT__3214EC2795F3C55A");
+
+            entity.ToTable("DUA_STATE_HISTORY");
+
+            entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.ChangeDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime")
+                .HasColumnName("CHANGE_DATE");
+            entity.Property(e => e.DuaId).HasColumnName("DUA_ID");
+            entity.Property(e => e.DuaStateId).HasColumnName("DUA_STATE_ID");
+            entity.Property(e => e.Notes)
+                .HasMaxLength(512)
+                .IsUnicode(false)
+                .HasColumnName("NOTES");
+            entity.Property(e => e.UserId).HasColumnName("USER_ID");
+
+            entity.HasOne(d => d.Dua).WithMany(p => p.DuaStateHistories)
+                .HasForeignKey(d => d.DuaId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__DUA_STATE__DUA_I__0E8E2250");
+
+            entity.HasOne(d => d.DuaState).WithMany(p => p.DuaStateHistories)
+                .HasForeignKey(d => d.DuaStateId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__DUA_STATE__DUA_S__0F824689");
+
+            entity.HasOne(d => d.User).WithMany(p => p.DuaStateHistories)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__DUA_STATE__USER___116A8EFB");
         });
 
         modelBuilder.Entity<FailedJob>(entity =>
@@ -955,7 +1066,16 @@ public partial class Simex04Context : DbContext
             entity.Property(e => e.Date)
                 .HasColumnType("datetime")
                 .HasColumnName("DATE");
+            entity.Property(e => e.Observations)
+                .HasMaxLength(255)
+                .IsUnicode(false)
+                .HasColumnName("OBSERVATIONS");
+            entity.Property(e => e.OperationId).HasColumnName("OPERATION_ID");
             entity.Property(e => e.OperationStateId).HasColumnName("OPERATION_STATE_ID");
+
+            entity.HasOne(d => d.Operation).WithMany(p => p.OperationStateHistories)
+                .HasForeignKey(d => d.OperationId)
+                .HasConstraintName("FK__OPERATION__OPERA__041093DD");
 
             entity.HasOne(d => d.OperationState).WithMany(p => p.OperationStateHistories)
                 .HasForeignKey(d => d.OperationStateId)

@@ -29,6 +29,10 @@ public partial class User
 
     public virtual ICollection<Document> Documents { get; set; } = new List<Document>();
 
+    public virtual ICollection<DuaStateHistory> DuaStateHistories { get; set; } = new List<DuaStateHistory>();
+
+    public virtual ICollection<Dua> Duas { get; set; } = new List<Dua>();
+
     public virtual ICollection<Notification> Notifications { get; set; } = new List<Notification>();
 
     public virtual ICollection<Offer> Offers { get; set; } = new List<Offer>();
