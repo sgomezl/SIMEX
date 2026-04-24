@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mainActivityOperacion"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:orientation="vertical">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/principal"
+        android:elevation="12dp"
+        android:paddingTop="35dp"
+        android:paddingBottom="10dp">
+
+        <ImageButton
+            android:id="@+id/btnHome"
+            android:layout_width="120dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="15dp"
+            android:background="@android:color/transparent"
+            android:scaleType="fitCenter"
+            android:src="@drawable/white_logo"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/btn_notifications"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginEnd="15dp"
+            android:background="@android:color/transparent"
+            android:scaleType="fitCenter"
+            android:src="@drawable/notifications"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btnUser"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/btnUser"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginEnd="15dp"
+            android:background="@android:color/transparent"
+            android:padding="5dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/login_user"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/tvOperationReference"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:background="@drawable/btn_orange"
+        android:fontFamily="@font/montserrat_bold"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="5dp"
+        android:text="REF-1234567890"
+        android:textColor="@color/background"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/tvOperationTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:fontFamily="@font/montserrat_bold"
+        android:text="Detalle del envio:"
+        android:textColor="@color/principal"
+        android:textSize="25sp" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_marginTop="25dp"
+        android:paddingHorizontal="20dp">
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="40dp"
+            android:src="@drawable/boat" />
+
+        <ImageView
+            android:id="@+id/linear_seguimiento"
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:layout_gravity="center"
+            android:src="@drawable/linea_seguimiento" />
+
+        <TextView
+            android:id="@+id/tvOrigin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|start"
+            android:fontFamily="@font/montserrat_bold"
+            android:text="Puerto de Shanghai"
+            android:textColor="@color/principal"
+
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tvRouteMode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center"
+            android:fontFamily="@font/montserrat_bold"
+            android:text="60%"
+            android:textColor="@color/principal"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tvDestination"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:fontFamily="@font/montserrat_bold"
+            android:text="Puerto de Barcelona"
+            android:textColor="@color/principal"
+            android:textSize="12sp" />
+    </FrameLayout>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="20dp"
+        android:layout_marginTop="12dp"
+        android:layout_weight="1"
+        app:cardCornerRadius="18dp"
+        app:cardElevation="6dp">
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/mapFragment"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </androidx.cardview.widget.CardView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="20dp"
+        android:paddingHorizontal="50dp">
+        <FrameLayout
+            android:layout_width="20dp"
+            android:layout_height="300dp">
+            <ImageView
+                android:layout_width="3dp"
+                android:layout_height="300dp"
+                android:layout_gravity="center"
+                android:src="@drawable/linea_seguimiento" />
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:src="@drawable/ellipse"
+                android:layout_gravity="center|top"/>
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:src="@drawable/ellipse"
+                android:layout_marginTop="70dp"
+                android:layout_gravity="center|top"/>
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:src="@drawable/ellipse"
+                android:layout_gravity="center"/>
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:src="@drawable/ellipse"
+                android:layout_marginBottom="70dp"
+                android:layout_gravity="center|bottom"/>
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:src="@drawable/ellipse"
+                android:layout_gravity="center|bottom"/>
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="Almacén origen"
+                android:textColor="@color/principal"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:fontFamily="@font/montserrat_medium"
+                android:text="21/02  16:30  Salido de almacén"
+                android:textColor="@color/principal"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="22dp"
+                android:textSize="15sp"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="Puerto destino"
+                android:textColor="@color/principal"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:fontFamily="@font/montserrat_medium"
+                android:text="24/02  13:20  En puerto de destino"
+                android:textColor="@color/principal"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="22dp"
+                android:textSize="15sp"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="Aduana importación"
+                android:textColor="@color/principal"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:fontFamily="@font/montserrat_medium"
+                android:text="..."
+                android:textColor="@color/principal"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="22dp"
+                android:textSize="15sp"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="Transporte terrestre"
+                android:textColor="@color/principal"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:fontFamily="@font/montserrat_medium"
+                android:text="..."
+                android:textColor="@color/principal"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="22dp"
+                android:textSize="15sp"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="Almacén destino"
+                android:textColor="@color/principal"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnVolve"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/btn_blue"
+        android:fontFamily="@font/montserrat_bold"
+        android:text="Volve"
+        android:textColor="@color/background"
+        android:textSize="20sp"/>
+</LinearLayout>
