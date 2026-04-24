@@ -9,7 +9,7 @@
         public decimal TotalCost { get; set; }
         public DateTime? Etd { get; set; }
         public DateTime? Eta { get; set; }
-        public int? IncotermId { get; set; }
+        public string IncotermCode { get; set; }
         public int? PiecesNumber { get; set; }
         public decimal Kilograms { get; set; }
         public string StatusName { get; internal set; }

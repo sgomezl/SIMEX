@@ -29,26 +29,25 @@ public class OperationsController : ControllerBase
         if (user == null || user.CompanyId == null) return Ok(new List<OperationDto>());
 
         var operationsDto = await _context.Operations
-            .AsNoTracking()
-            .Where(op => op.NavieraId == user.CompanyId)
-            .Select(op => new OperationDto
-            {
-                Id = op.Id,
-                OrderReference = op.OrderReference,
-                OriginPortName = op.OriginPort.Name ?? "Puerto Desconocido",
-                DestinationPortName = op.DestinationPort.Name ?? "Puerto Desconocido",
-                TotalCost = op.TotalCost,
-                Etd = op.Etd,
-                Eta = op.Eta,
-                IncotermId = op.IncotermId,
-                PiecesNumber = op.PiecesNumber,
-                Kilograms = op.Kilograms,
-                StatusName = op.OperationStateHistories
-                    .OrderByDescending(osh => osh.Id)
-                    .Select(osh => osh.OperationState.Name)
-                    .FirstOrDefault() ?? "Sin estado"
-
-            }).ToListAsync();
+        .AsNoTracking()
+        .Where(op => op.NavieraId == user.CompanyId)
+        .Select(op => new OperationDto
+        {
+            Id = op.Id,
+            OrderReference = op.OrderReference,
+            OriginPortName = op.OriginPort.Name ?? "Puerto Desconocido",
+            DestinationPortName = op.DestinationPort.Name ?? "Puerto Desconocido",
+            TotalCost = op.TotalCost,
+            Etd = op.Etd,
+            Eta = op.Eta,
+            IncotermCode = op.Incoterm.IncotermType.Code ?? "N/A",
+            PiecesNumber = op.PiecesNumber,
+            Kilograms = op.Kilograms,
+            StatusName = op.OperationStateHistories
+                .OrderByDescending(osh => osh.Id)
+                .Select(osh => osh.OperationState.Name)
+                .FirstOrDefault() ?? "Sin estado"
+        }).ToListAsync();
         return Ok(operationsDto);
     }
 
@@ -56,13 +55,15 @@ public class OperationsController : ControllerBase
     public async Task<ActionResult<IEnumerable<OperationDto>>> GetRecentOperations()
     {
         var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (!int.TryParse(userIdClaim, out var userId)) return Unauthorized(new { message = "Token invalido." });
+        if (!int.TryParse(userIdClaim, out var userId))
+            return Unauthorized(new { message = "Token invalido." });
 
         var user = await _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == userId);
-        if (user == null || user.CompanyId == null) return Ok(new List<OperationDto>());
+        if (user == null || user.CompanyId == null)
+            return Ok(new List<OperationDto>());
 
         DateTime haceSieteDias = DateTime.Today.AddDays(-7);
-        DateTime hoy = DateTime.Today.AddDays(1).AddTicks(-1); // Incluye todo el día de hoy
+        DateTime hoy = DateTime.Today.AddDays(1).AddTicks(-1);
 
         var operationsDto = await _context.Operations
             .AsNoTracking()
@@ -77,7 +78,7 @@ public class OperationsController : ControllerBase
                 TotalCost = op.TotalCost,
                 Etd = op.Etd,
                 Eta = op.Eta,
-                IncotermId = op.IncotermId,
+                IncotermCode = op.Incoterm.IncotermType.Code ?? "N/A",
                 PiecesNumber = op.PiecesNumber,
                 Kilograms = op.Kilograms,
                 StatusName = op.OperationStateHistories
@@ -86,7 +87,6 @@ public class OperationsController : ControllerBase
                     .FirstOrDefault() ?? "Sin Estado"
             })
             .ToListAsync();
-
         return Ok(operationsDto);
     }
 
