@@ -163,4 +163,70 @@ public class OperationsController : ControllerBase
         return result;
     }
 
+    [HttpPost("{operationId:int}/accept")]
+    public async Task<IActionResult> AcceptOperation(int operationId)
+    {
+        IActionResult result;
+        var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        if (!int.TryParse(userIdClaim, out var userId))
+        {
+            result = Unauthorized(new { message = "Token invalido." });
+        }
+        else
+        {
+            var user = await _context.Users
+                .AsNoTracking()
+                .FirstOrDefaultAsync(u => u.Id == userId);
+
+            if (user == null || user.CompanyId == null)
+            {
+                result = NotFound(new { message = "Usuario no encontrado o sin empresa asociada." });
+            }
+            else
+            {
+                var operation = await _context.Operations
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(op => op.Id == operationId && op.NavieraId == user.CompanyId);
+
+                if (operation == null)
+                {
+                    result = NotFound(new { message = "Operacion no encontrada." });
+                }
+                else
+                {
+                    var acceptedState = await _context.OperationStates
+                        .AsNoTracking()
+                        .FirstOrDefaultAsync(state => state.Name == "Aceptada");
+
+                    if (acceptedState == null)
+                    {
+                        result = StatusCode(500, new { message = "No existe un estado de aceptacion configurado para operaciones." });
+                    }
+                    else
+                    {
+                        _context.OperationStateHistories.Add(new OperationStateHistory
+                        {
+                            OperationId = operationId,
+                            OperationStateId = acceptedState.Id,
+                            Observations = null,
+                            Date = DateTime.Now
+                        });
+
+                        await _context.SaveChangesAsync();
+
+                        result = Ok(new
+                        {
+                            message = "Operacion aceptada correctamente.",
+                            operationId,
+                            operationStateId = acceptedState.Id
+                        });
+                    }
+                }
+            }
+        }
+
+        return result;
+    }
+
 }
