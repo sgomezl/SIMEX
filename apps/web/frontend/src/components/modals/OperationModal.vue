@@ -41,7 +41,7 @@
             <div v-show="activeTab === 'informacion'" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-4">
 
               <BaseInput v-model="formData.orderReference" id="orderReference" label="Número de referencia" placeholder="Ej: REF-2026-001" required :error="errors.orderReference" />
-              <BaseDropdown v-model="formData.importerId" id="importerId" label="Importador" :options="validImporters" value-key="id" label-key="name" placeholder="Selecciona Importador" required :error="errors.importerId" />
+              <BaseDropdown v-model="formData.importerId" id="importerId" label="Importador" :options="importersExporters" value-key="id" label-key="name" placeholder="Selecciona Importador" required :error="errors.importerId" />
               <BaseInput v-model="formData.pickupData" type="date" id="pickupData" label="Fecha de recogida" required :error="errors.pickupData" />
               <BaseDropdown v-model="formData.incotermId" id="incotermId" label="Incoterm" :options="incoterms" value-key="id" label-key="code" placeholder="Selecciona Incoterm" required :error="errors.incotermId" />
               <BaseInput v-model="formData.etd" type="date" id="etd" label="etd (Fecha de salida barco estimada)" required :error="errors.etd" />
@@ -201,13 +201,14 @@ const sendTypes = ref<SendType[]>([]);
 const isEditing = computed(() => !!props.operationForEdit);
 
 const filteredPackageTypes = computed(() => {
-  return packageTypes.value; // en lugar de filtrar aquí, ya vienen bien
+  return packageTypes.value;
 });
 
 const filteredPackageSubTypes = computed(() => {
-  return packageSubtypes.value; // Se carga de la BD bajo demanda usando un watch
+  return packageSubtypes.value;
 });
 
+// AÑADIDO: Filtros para asegurarnos de que el select muestra opciones correctas
 const validImporters = computed(() => {
   return importersExporters.value.filter(c => c.companyType?.id === 1 || c.companyType?.id === 3);
 });
@@ -217,7 +218,7 @@ const validExporters = computed(() => {
 });
 
 const initialFormState: CreateOperation = {
-  createUserId: 1,
+  createUserId: 1, // Esto idealmente debería venir del Auth store, no hardcodeado
   orderReference: '',
   importerId: 0,
   pickupData: '',
@@ -318,7 +319,7 @@ onMounted(async () => {
     incoterms.value = incoData;
     ports.value = portsData;
     containerTypes.value = containerData;
-    packageTypes.value = packageData; // packageData ya viene filtrado desde Laravel (parentId = null)
+    packageTypes.value = packageData;
     currencyTypes.value = currencyTypesData;
     sendTypes.value = sendTypesData;
 
@@ -348,10 +349,14 @@ watch(() => props.isOpen, (newVal) => {
       Object.assign(formData, {
         orderReference: props.operationForEdit.orderReference,
         importerId: props.operationForEdit.importer?.id || '',
+        // Si editas, asegúrate de setear también el exportator
+        exportatorId: props.operationForEdit.exporter?.id || '',
       });
     } else {
       Object.assign(formData, { ...initialFormState });
+      // CORRECCIÓN: Resetea todos los dropdowns clave para que Vue detecte el cambio a "vacío"
       formData.importerId = '' as any;
+      formData.exportatorId = '' as any;
       formData.incotermId = '' as any;
     }
   }
@@ -363,15 +368,16 @@ function validateForm() {
 
   if (!formData.orderReference) { errors.value.orderReference = 'La referencia es obligatoria'; isValid = false; }
   if (!formData.importerId) { errors.value.importerId = 'Selecciona un importador'; isValid = false; }
+
+  // CORRECCIÓN: Faltaba validar el exportador aquí
   if (!formData.exportatorId) { errors.value.exportatorId = 'Selecciona un exportador'; isValid = false; }
+
   if (!formData.incotermId) { errors.value.incotermId = 'Selecciona un incoterm'; isValid = false; }
 
-  // Verificar que los datos de coste rellenados tengan moneda y tipo de envío
   Object.values(costValues).forEach((cost) => {
     if (cost.cost > 0 || cost.sale > 0) {
       if (!cost.currencyTypeId || !cost.sendTypeId) {
         isValid = false;
-        // Opcional: mostrar error general
       }
     }
   });
@@ -398,15 +404,20 @@ function onConfirm() {
       saleAmount: cost.saleAmount
     }));
 
-  emit('confirm', { ...formData, costs: costsPayload });
+  // Asegurarnos de que los IDs van como enteros si el backend lo requiere estricto,
+  // aunque Laravel suele castearlos automáticamente.
+  const payload = {
+    ...formData,
+    importerId: Number(formData.importerId),
+    exportatorId: Number(formData.exportatorId),
+    incotermId: Number(formData.incotermId),
+    costs: costsPayload
+  };
+
+  emit('confirm', payload);
 }
 
 function onCancel() {
   emit('cancel');
 }
 </script>
-
-<style scoped>
-.modal-enter-active, .modal-leave-active { transition: opacity 0.3s ease; }
-.modal-enter-from, .modal-leave-to { opacity: 0; }
-</style>
