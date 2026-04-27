@@ -41,14 +41,14 @@
             <div v-show="activeTab === 'informacion'" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-4">
 
               <BaseInput v-model="formData.orderReference" id="orderReference" label="Número de referencia" placeholder="Ej: REF-2026-001" required :error="errors.orderReference" />
-              <BaseDropdown v-model="formData.importerId" id="importerId" label="Importador" :options="importersExporters" value-key="id" label-key="name" placeholder="Selecciona Importador" required :error="errors.importerId" />
+              <BaseDropdown v-model="formData.importerId" id="importerId" label="Importador" :options="validImporters" value-key="id" label-key="name" placeholder="Selecciona Importador" required :error="errors.importerId" />
               <BaseInput v-model="formData.pickupData" type="date" id="pickupData" label="Fecha de recogida" required :error="errors.pickupData" />
               <BaseDropdown v-model="formData.incotermId" id="incotermId" label="Incoterm" :options="incoterms" value-key="id" label-key="code" placeholder="Selecciona Incoterm" required :error="errors.incotermId" />
               <BaseInput v-model="formData.etd" type="date" id="etd" label="etd (Fecha de salida barco estimada)" required :error="errors.etd" />
               <BaseDropdown v-model="formData.customsAgentId" id="customsAgentId" label="Agente Aduanero" :options="customsAgents" value-key="id" label-key="fullName" placeholder="Selecciona Agente" :error="errors.customsAgentId" />
               <BaseInput v-model="formData.eta" type="date" id="eta" label="ETA (Fecha llegada estimada)" required :error="errors.eta" />
               <BaseDropdown v-model="formData.documentUserId" id="documentUserId" label="Documentación user" :options="users" value-key="id" label-key="fullName" placeholder="Selecciona Usuario" required :error="errors.documentUserId" />
-              <BaseDropdown v-model="formData.exportatorId" id="exportatorId" label="Exportador" :options="importersExporters" value-key="id" label-key="name" placeholder="Selecciona Exportador" required :error="errors.exportatorId" />
+              <BaseDropdown v-model="formData.exportatorId" id="exportatorId" label="Exportador" :options="validExporters" value-key="id" label-key="name" placeholder="Selecciona Exportador" required :error="errors.exportatorId" />
               <BaseDropdown v-model="formData.operationUserId" id="operationUserId" label="Operación User" :options="users" value-key="id" label-key="fullName" placeholder="Selecciona Usuario" required :error="errors.operationUserId" />
               <BaseDropdown v-model="formData.salesUserId" id="salesUserId" label="Sales User" :options="users" value-key="id" label-key="fullName" placeholder="Selecciona Usuario" required :error="errors.salesUserId" />
 
@@ -208,6 +208,14 @@ const filteredPackageSubTypes = computed(() => {
   return packageSubtypes.value; // Se carga de la BD bajo demanda usando un watch
 });
 
+const validImporters = computed(() => {
+  return importersExporters.value.filter(c => c.companyType?.id === 1 || c.companyType?.id === 3);
+});
+
+const validExporters = computed(() => {
+  return importersExporters.value.filter(c => c.companyType?.id === 2 || c.companyType?.id === 3);
+});
+
 const initialFormState: CreateOperation = {
   createUserId: 1,
   orderReference: '',
@@ -355,6 +363,7 @@ function validateForm() {
 
   if (!formData.orderReference) { errors.value.orderReference = 'La referencia es obligatoria'; isValid = false; }
   if (!formData.importerId) { errors.value.importerId = 'Selecciona un importador'; isValid = false; }
+  if (!formData.exportatorId) { errors.value.exportatorId = 'Selecciona un exportador'; isValid = false; }
   if (!formData.incotermId) { errors.value.incotermId = 'Selecciona un incoterm'; isValid = false; }
 
   // Verificar que los datos de coste rellenados tengan moneda y tipo de envío
