@@ -41,7 +41,7 @@
             <div v-show="activeTab === 'informacion'" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-4">
 
               <BaseInput v-model="formData.orderReference" id="orderReference" label="Número de referencia" placeholder="Ej: REF-2026-001" required :error="errors.orderReference" />
-              <BaseDropdown v-model="formData.importerId" id="importerId" label="Importador" :options="importersExporters" value-key="id" label-key="name" placeholder="Selecciona Importador" required :error="errors.importerId" />
+              <BaseDropdown v-model="formData.importerId" id="importerId" label="Importador" :options="validImporters" value-key="id" label-key="name" placeholder="Selecciona Importador" required :error="errors.importerId" />
               <BaseInput v-model="formData.pickupData" type="date" id="pickupData" label="Fecha de recogida" required :error="errors.pickupData" />
               <BaseDropdown v-model="formData.incotermId" id="incotermId" label="Incoterm" :options="incoterms" value-key="id" label-key="code" placeholder="Selecciona Incoterm" required :error="errors.incotermId" />
               <BaseInput v-model="formData.etd" type="date" id="etd" label="etd (Fecha de salida barco estimada)" required :error="errors.etd" />
