@@ -3,6 +3,7 @@ package com.mygdx.primelogistics.android
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.ImageButton
 import android.widget.Button
@@ -24,12 +25,14 @@ import com.google.android.gms.maps.model.PolylineOptions
 import com.mygdx.primelogistics.R
 import com.mygdx.primelogistics.android.models.Operation
 import com.mygdx.primelogistics.android.utils.CountryCoordinateResolver
+import com.mygdx.primelogistics.android.utils.HomeNavigator
 import com.mygdx.primelogistics.android.utils.MaritimeRoutePlanner
 import java.time.LocalDateTime
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 import java.util.Locale
+import kotlin.math.roundToInt
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -40,6 +43,8 @@ class DetalleOperacionActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var tvOrigin: TextView
     private lateinit var tvDestination: TextView
     private lateinit var tvRouteMode: TextView
+    private lateinit var trackingHeaderContainer: FrameLayout
+    private lateinit var boat: ImageView
     private lateinit var trackingTitles: List<TextView>
     private lateinit var trackingSubtitles: List<TextView>
     private lateinit var trackingDots: List<ImageView>
@@ -76,6 +81,8 @@ class DetalleOperacionActivity : AppCompatActivity(), OnMapReadyCallback {
         tvOrigin = findViewById(R.id.tvOrigin)
         tvDestination = findViewById(R.id.tvDestination)
         tvRouteMode = findViewById(R.id.tvRouteMode)
+        trackingHeaderContainer = findViewById(R.id.trackingHeaderContainer)
+        boat = findViewById(R.id.boat)
 
         trackingTitles = listOf(
             findViewById(R.id.tvStep1Title),
@@ -111,8 +118,9 @@ class DetalleOperacionActivity : AppCompatActivity(), OnMapReadyCallback {
         tvOrigin.text = originName
         tvDestination.text = destinationName
         renderTrackingProgress()
+        trackingHeaderContainer.post { updateBoatPosition() }
 
-        findViewById<ImageButton>(R.id.btnHome).setOnClickListener { finish() }
+        findViewById<ImageButton>(R.id.btnHome).setOnClickListener { HomeNavigator.navigateToHome(this) }
         findViewById<Button>(R.id.btnVolve).setOnClickListener { finish() }
         findViewById<ImageButton>(R.id.btnUser).setOnClickListener {
             startActivity(Intent(this, UsuarioActivity::class.java))
@@ -158,6 +166,8 @@ class DetalleOperacionActivity : AppCompatActivity(), OnMapReadyCallback {
             trackingSubtitles[index].text = subtitle
             styleTrackingStep(index, currentIndex)
         }
+
+        updateBoatPosition()
     }
 
     private fun buildCurrentStepSubtitle(stepName: String, formattedArrival: String?): String {
@@ -177,6 +187,42 @@ class DetalleOperacionActivity : AppCompatActivity(), OnMapReadyCallback {
         trackingTitles[index].setTextColor(titleColor)
         trackingSubtitles[index].setTextColor(subtitleColor)
         trackingDots[index].setColorFilter(dotColor)
+    }
+
+    private fun updateBoatPosition() {
+        if (!::boat.isInitialized || !::trackingHeaderContainer.isInitialized) {
+            return
+        }
+
+        val layoutParams = boat.layoutParams as? FrameLayout.LayoutParams ?: return
+        val availableWidth = trackingHeaderContainer.width -
+            trackingHeaderContainer.paddingLeft -
+            trackingHeaderContainer.paddingRight -
+            boat.width
+
+        if (availableWidth <= 0) {
+            return
+        }
+
+        val progressFraction = resolveTrackingProgressFraction()
+        layoutParams.marginStart = (availableWidth * progressFraction).roundToInt()
+        boat.layoutParams = layoutParams
+    }
+
+    private fun resolveTrackingProgressFraction(): Float {
+        if (currentTrackingStepUiPercent > 0) {
+            return (currentTrackingStepUiPercent.coerceIn(0, 100) / 100f)
+        }
+
+        if (currentTrackingStepOrder in 1..seaSteps.size) {
+            return if (seaSteps.size == 1) {
+                1f
+            } else {
+                (currentTrackingStepOrder - 1).toFloat() / (seaSteps.size - 1).toFloat()
+            }
+        }
+
+        return 0f
     }
 
     private fun formatTrackingDate(rawValue: String): String? {
