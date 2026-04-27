@@ -68,6 +68,13 @@
           <BaseButton type="submit" class="bg-[#FD8036] hover:bg-orange-600 text-white" :disabled="!isFormValid">{{ isEditing ? 'Guardar Cambios' : 'Crear Empresa' }}</BaseButton>        </div>
       </form>
     </div>
+    
+    <CustomsDispatchModal 
+      v-if="isDuaModalOpen" 
+      @close="closeDuaModal" 
+      @save="saveDua" 
+    />
+
   </div>
 </template>
 

@@ -2,9 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\DTOs\createCompanyDTO;
-use App\DTOs\updateCompanyDTO;
-use App\DTOs\CompanyDTO;
 use App\Models\Company;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -15,45 +12,64 @@ class CompanyController extends Controller
 
     public function index()
     {
-        // Añadimos region.country para que el DTO pueda anidar el país correctamente
-        $companies = Company::with(['companyType', 'region.country', 'city'])->get();
+      
+        $companies = Company::with(['companyType', 'region', 'city'])->get();
 
-        $data = $companies->map(function ($company) {
-            return CompanyDTO::fromModel($company);
+        // Recorremos cada empresa que hemos obtenido para añadirle un dato que le falta.
+        //    Como la empresa solo tiene REGION_ID, pero el frontend necesita COUNTRY_ID para los desplegables
+       
+
+        $companies->each(function ($company) {
+            $company->COUNTRY_ID = $company->region ? $company->region->COUNTRY_ID : null;
         });
-
-        return response()->json($data);
+        
+        return response()->json($companies);
     }
 
+   
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'NAME' => 'required|string|max:255',
-            'EMAIL' => 'required|email|unique:COMPANY,EMAIL',
-            'NIF' => 'required|string|max:20|unique:COMPANY,NIF',
-            'COMPANY_TYPE_ID' => 'required|integer|exists:COMPANY_TYPES,ID',
-            'REGION_ID' => 'required|integer|exists:REGIONS,ID',
-            'CITY_ID' => 'required|integer|exists:CITIES,ID',
+            'NAME' => 'required|string|max:255', 
+            'EMAIL' => 'required|email|unique:COMPANY,EMAIL', 
+            'NIF' => 'required|string|max:20|unique:COMPANY,NIF', 
+            'COMPANY_TYPE_ID' => 'required|integer|exists:COMPANY_TYPES,ID', 
+            'REGION_ID' => 'required|integer|exists:REGIONS,ID', 
+            'CITY_ID' => 'required|integer|exists:CITIES,ID', 
             'ADDRESS' => 'required|string',
-            'ACTIVE' => 'required|boolean',
-            'PHONE_NUMBER' => 'nullable|string|max:20',
-            'ICON_PATH' => 'nullable|string|max:255',
+            'ACTIVE' => 'required|boolean', 
+            'PHONE_NUMBER' => 'nullable|string|max:20', 
+            'ICON_PATH' => 'nullable|string|max:255', 
         ]);
 
+        
+        
         $company = Company::create($validatedData);
-        $company->load(['companyType', 'region.country', 'city']);
+        
+      
+        //    Le añadimos las relaciones y el COUNTRY_ID 
+        $company->load(['companyType', 'region', 'city']);
+        $company->COUNTRY_ID = $company->region ? $company->region->COUNTRY_ID : null;
 
-        return response()->json(CompanyDTO::fromModel($company), 201);
+
+        return response()->json($company, 201);
+
     }
 
+    
     public function show(Company $company)
     {
-        $company->load(['companyType', 'region.country', 'city']);
-        return response()->json(CompanyDTO::fromModel($company));
+        $company->load(['companyType', 'region', 'city']);
+
+        $company->COUNTRY_ID = $company->region ? $company->region->COUNTRY_ID : null;
+        
+        return response()->json($company);
     }
 
+  
     public function update(Request $request, Company $company)
     {
+       
         $validatedData = $request->validate([
             'NAME' => 'sometimes|required|string|max:255',
             'EMAIL' => 'sometimes|required|email|unique:COMPANY,EMAIL,' . $company->ID . ',ID',
@@ -68,44 +84,18 @@ class CompanyController extends Controller
         ]);
 
         $company->update($validatedData);
-        $company->load(['companyType', 'region.country', 'city']);
+        
+        $company->load(['companyType', 'region', 'city']);
+        $company->COUNTRY_ID = $company->region ? $company->region->COUNTRY_ID : null;
 
-        return response()->json(CompanyDTO::fromModel($company));
+        return response()->json($company);
     }
 
-
+    
     public function destroy(Company $company)
     {
         $company->delete();
-
+       
         return response()->json(null, 204);
-    }
-
-    public function getImportersExportersCompanies()
-    {
-        $importersExporters = Company::with(['companyType', 'region.country', 'city'])
-          ->whereIn('COMPANY_TYPE_ID', [1, 2, 3])
-          ->where('ACTIVE', true)
-          ->get();
-
-        $data = $importersExporters->map(function ($company) {
-            return CompanyDTO::fromModel($company);
-        });
-
-        return response()->json($data);
-    }
-
-    public function getNavieraCompanies()
-    {
-        $navieras = Company::with(['companyType', 'region.country', 'city'])
-          ->where('COMPANY_TYPE_ID', 4)
-          ->where('ACTIVE', true)
-          ->get();
-
-        $data = $navieras->map(function ($company) {
-            return CompanyDTO::fromModel($company);
-        });
-
-        return response()->json($data);
     }
 }
