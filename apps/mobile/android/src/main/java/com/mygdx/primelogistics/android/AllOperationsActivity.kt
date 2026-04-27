@@ -15,6 +15,7 @@ import com.mygdx.primelogistics.R
 import com.mygdx.primelogistics.android.adapters.OpAdapter
 import com.mygdx.primelogistics.android.api.RetrofitClient
 import com.mygdx.primelogistics.android.models.Operation
+import com.mygdx.primelogistics.android.utils.HomeNavigator
 import com.mygdx.primelogistics.android.utils.SessionManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -55,8 +56,7 @@ class AllOperationsActivity : AppCompatActivity() {
         loadData()
 
         graficosbtnvolver.setOnClickListener {
-            startActivity(Intent(this, ClientHomeActivity::class.java))
-            finish()
+            HomeNavigator.navigateToHome(this)
         }
     }
 
@@ -67,6 +67,10 @@ class AllOperationsActivity : AppCompatActivity() {
                 val opsResp = RetrofitClient.api.getUserOperations()
 
                 withContext(Dispatchers.Main) {
+                    if (userResp.isSuccessful && userResp.body() != null) {
+                        sessionManager.saveRoleId(userResp.body()!!.rol.id)
+                    }
+
                     if (opsResp.isSuccessful) {
                         val lista = opsResp.body() ?: emptyList()
                         adapterAllOps.updateData(lista)

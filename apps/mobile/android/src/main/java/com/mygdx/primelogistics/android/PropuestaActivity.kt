@@ -21,6 +21,7 @@ import com.mygdx.primelogistics.R
 import com.mygdx.primelogistics.android.api.RetrofitClient
 import com.mygdx.primelogistics.android.models.Operation
 import com.mygdx.primelogistics.android.models.RejectOperationRequest
+import com.mygdx.primelogistics.android.utils.HomeNavigator
 import com.mygdx.primelogistics.android.utils.SessionManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -82,7 +83,7 @@ class PropuestaActivity : AppCompatActivity() {
     }
 
     private fun bindActions() {
-        findViewById<ImageButton>(R.id.btnHome).setOnClickListener { finish() }
+        findViewById<ImageButton>(R.id.btnHome).setOnClickListener { HomeNavigator.navigateToHome(this) }
         findViewById<ImageButton>(R.id.btnUser).setOnClickListener {
             startActivity(Intent(this, UsuarioActivity::class.java))
         }
