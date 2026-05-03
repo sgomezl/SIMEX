@@ -21,7 +21,5 @@ public partial class TrackingFlow
 
     public virtual ICollection<Operation> Operations { get; set; } = new List<Operation>();
 
-    public virtual TransportType? TransportType { get; set; }
-
     public virtual ICollection<TrackingFlowStep> TrackingFlowSteps { get; set; } = new List<TrackingFlowStep>();
 }

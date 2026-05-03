@@ -17,6 +17,7 @@ import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.utils.ColorTemplate
 import com.mygdx.primelogistics.R
 import com.mygdx.primelogistics.android.api.RetrofitClient
+import com.mygdx.primelogistics.android.models.Operation
 import com.mygdx.primelogistics.android.utils.HomeNavigator
 import com.mygdx.primelogistics.android.utils.SessionManager
 import kotlinx.coroutines.CoroutineScope
@@ -27,6 +28,8 @@ import kotlinx.coroutines.withContext
 class AgentHomeActivity : AppCompatActivity() {
     private lateinit var sessionManager: SessionManager
     private lateinit var tvUserName: TextView
+
+    private var operations: MutableList<Operation> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -94,13 +97,14 @@ class AgentHomeActivity : AppCompatActivity() {
     }
 
     private fun setupChart() {
+
+
         val pieChart = findViewById<PieChart>(R.id.pieChart)
 
         val entries = arrayListOf(
             PieEntry(40f, "Android"),
             PieEntry(30f, "iOS"),
-            PieEntry(20f, "Web"),
-            PieEntry(10f, "Otros")
+            PieEntry(30f, "Otros")
         )
 
         val dataSet = PieDataSet(entries, "Categorias").apply {

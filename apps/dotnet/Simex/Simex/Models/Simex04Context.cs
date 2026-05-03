@@ -6,6 +6,10 @@ namespace Simex.Models;
 
 public partial class Simex04Context : DbContext
 {
+    public Simex04Context()
+    {
+    }
+
     public Simex04Context(DbContextOptions<Simex04Context> options)
         : base(options)
     {
@@ -120,6 +124,10 @@ public partial class Simex04Context : DbContext
     public virtual DbSet<UserNotificationConfig> UserNotificationConfigs { get; set; }
 
     public virtual DbSet<ValidationType> ValidationTypes { get; set; }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Data Source=vps-5d4cfa08.vps.ovh.net;Initial Catalog=simex04;User ID=simex04;Password=xQlW}N6Rd40@;Encrypt=True;TrustServerCertificate=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -1438,10 +1446,6 @@ public partial class Simex04Context : DbContext
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime")
                 .HasColumnName("UPDATED_AT");
-
-            entity.HasOne(d => d.TransportType).WithMany(p => p.TrackingFlows)
-                .HasForeignKey(d => d.TransportTypeId)
-                .HasConstraintName("FK_TRACKING_FLOWS_TRANSPORT_TYPE");
         });
 
         modelBuilder.Entity<TrackingFlowStep>(entity =>

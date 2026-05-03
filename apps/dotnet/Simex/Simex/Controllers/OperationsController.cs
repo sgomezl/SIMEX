@@ -22,6 +22,44 @@ public class OperationsController : ControllerBase
         _operationTrackingService = operationTrackingService;
     }
 
+    [HttpGet("all-operations")]
+    public async Task<ActionResult<IEnumerable<OperationDto>>> GetAllOperations()
+    {
+        var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (!int.TryParse(userIdClaim, out var userId)) return Unauthorized(new { message = "Token invalido." });
+
+        var user = await _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == userId);
+        if (user == null || user.CompanyId == null) return Ok(new List<OperationDto>());
+
+        var operationsDto = await _context.Operations
+        .AsNoTracking()
+        .Select(op => new OperationDto
+        {
+            Id = op.Id,
+            OrderReference = op.OrderReference,
+            OriginPortName = op.OriginPort.Name ?? "Puerto Desconocido",
+            DestinationPortName = op.DestinationPort.Name ?? "Puerto Desconocido",
+            TotalCost = op.TotalCost,
+            Etd = op.Etd,
+            Eta = op.Eta,
+            IncotermCode = op.Incoterm != null ? (op.Incoterm.IncotermType.Code ?? "N/A") : "N/A",
+            PiecesNumber = op.PiecesNumber,
+            Kilograms = op.Kilograms,
+            StatusName = op.OperationStateHistories
+                .OrderByDescending(osh => osh.Id)
+                .Select(osh => osh.OperationState != null ? osh.OperationState.Name : null)
+                .FirstOrDefault() ?? "Sin estado",
+            TrackingFlowId = op.TrackingFlowId,
+            TrackingFlowName = op.TrackingFlow != null ? op.TrackingFlow.Name : null,
+            CurrentTrackingFlowStepId = op.CurrentTrackingFlowStepId,
+            CurrentTrackingStepName = op.CurrentTrackingFlowStep != null ? op.CurrentTrackingFlowStep.Name : null,
+            CurrentTrackingStepOrder = op.CurrentTrackingFlowStep != null ? op.CurrentTrackingFlowStep.OrderNum : null,
+            CurrentTrackingStepUiPercent = op.CurrentTrackingFlowStep != null ? op.CurrentTrackingFlowStep.UiPercent : null,
+            CurrentTrackingStepArrivedAt = op.CurrentTrackingStepArrivedAt
+        }).ToListAsync();
+        return Ok(operationsDto);
+    }
+
     [HttpGet("user-operations")]
     public async Task<ActionResult<IEnumerable<OperationDto>>> GetUserOperations()
     {

@@ -26,6 +26,9 @@ interface ApiService {
         @Body request: UpdateIdentificationCardPathRequest
     ): Response<ResponseBody>
 
+    @GET("api/operations/all-operations")
+    suspend fun getAllOperations(): Response<List<Operation>>
+
     @GET("api/operations/user-operations")
     suspend fun getUserOperations(): Response<List<Operation>>
 
