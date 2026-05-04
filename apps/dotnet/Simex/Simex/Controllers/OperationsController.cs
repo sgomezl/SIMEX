@@ -365,12 +365,17 @@ public class OperationsController : ControllerBase
                 {
                     result = NotFound(new { message = "Operacion no encontrada." });
                 }
-                else if (operation.TrackingFlowId == null)
-                {
-                    result = BadRequest(new { message = "La operacion no tiene un flow de tracking configurado." });
-                }
                 else
                 {
+                    var flowResolution = await ResolveTrackingFlowIdAsync(operation);
+                    if (!flowResolution.IsValid)
+                    {
+                        result = BadRequest(new { message = flowResolution.ErrorMessage });
+                        return result;
+                    }
+
+                    operation.TrackingFlowId = flowResolution.TrackingFlowId;
+
                     TrackingFlowStep? nextStep;
 
                     if (operation.CurrentTrackingFlowStepId == null)
@@ -434,6 +439,56 @@ public class OperationsController : ControllerBase
         }
 
         return result;
+    }
+
+    private async Task<(bool IsValid, int? TrackingFlowId, string? ErrorMessage)> ResolveTrackingFlowIdAsync(Operation operation)
+    {
+        if (operation.TrackingFlowId != null)
+        {
+            return (true, operation.TrackingFlowId, null);
+        }
+
+        if (operation.CurrentTrackingFlowStepId != null)
+        {
+            var currentStepFlowId = await _context.TrackingFlowSteps
+                .AsNoTracking()
+                .Where(step => step.Id == operation.CurrentTrackingFlowStepId && step.Active)
+                .Select(step => (int?)step.TrackingFlowId)
+                .FirstOrDefaultAsync();
+
+            if (currentStepFlowId != null)
+            {
+                return (true, currentStepFlowId, null);
+            }
+        }
+
+        var historyFlowId = await _context.OperationTrackingHistories
+            .AsNoTracking()
+            .Where(history => history.OperationId == operation.Id)
+            .OrderByDescending(history => history.CreatedAt)
+            .ThenByDescending(history => history.Id)
+            .Select(history => (int?)history.TrackingFlowStep.TrackingFlowId)
+            .FirstOrDefaultAsync();
+
+        if (historyFlowId != null)
+        {
+            return (true, historyFlowId, null);
+        }
+
+        var activeFlowIds = await _context.TrackingFlows
+            .AsNoTracking()
+            .Where(flow => flow.Active)
+            .OrderBy(flow => flow.Id)
+            .Select(flow => flow.Id)
+            .Take(2)
+            .ToListAsync();
+
+        return activeFlowIds.Count switch
+        {
+            1 => (true, activeFlowIds[0], null),
+            0 => (false, null, "No existe ningun flow de tracking activo configurado."),
+            _ => (false, null, "La operacion no tiene un flow de tracking configurado.")
+        };
     }
 
     private async Task<object> BuildTrackingStepResponseAsync(Operation operation, string message)
