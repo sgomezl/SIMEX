@@ -2,6 +2,7 @@ package com.mygdx.primelogistics.android
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
@@ -28,7 +29,6 @@ import kotlinx.coroutines.withContext
 class AgentHomeActivity : AppCompatActivity() {
     private lateinit var sessionManager: SessionManager
     private lateinit var tvUserName: TextView
-
     private var operations: MutableList<Operation> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,7 +46,7 @@ class AgentHomeActivity : AppCompatActivity() {
         tvUserName = findViewById(R.id.tvUserName)
 
         bindActions()
-        setupChart()
+        loadData()
     }
 
     override fun onResume() {
@@ -97,31 +97,93 @@ class AgentHomeActivity : AppCompatActivity() {
     }
 
     private fun setupChart() {
-
-
+        val totalOps = operations.size
         val pieChart = findViewById<PieChart>(R.id.pieChart)
+        pieChart.setUsePercentValues(true)
+        pieChart.description.isEnabled = false
+        pieChart.centerText = "Operaciones por estado"
+
+        if (totalOps == 0) {
+            pieChart.clear()
+            pieChart.centerText = "Sin operaciones"
+            pieChart.invalidate()
+            return
+        }
+
+        val acceptedOps = operations.filter { it.statusName == "Aceptada" }
+        val rejectedOps = operations.filter { it.statusName == "Rechazada" }
+        val pendingOps = operations.filter { it.statusName == "Pendiente" }
+        val acceptedPercentage = (acceptedOps.size.toFloat() / totalOps) * 100
+        val rejectedPercentage = (rejectedOps.size.toFloat() / totalOps) * 100
+        val pendingPercentage = (pendingOps.size.toFloat() / totalOps) * 100
 
         val entries = arrayListOf(
-            PieEntry(40f, "Android"),
-            PieEntry(30f, "iOS"),
-            PieEntry(30f, "Otros")
+            PieEntry(acceptedPercentage, "Aceptada"),
+            PieEntry(pendingPercentage, "Pendiente"),
+            PieEntry(rejectedPercentage, "Rechazada")
         )
 
-        val dataSet = PieDataSet(entries, "Categorias").apply {
+        val dataSet = PieDataSet(entries, "").apply {
             colors = ColorTemplate.MATERIAL_COLORS.toList()
             valueTextSize = 14f
         }
 
         pieChart.data = PieData(dataSet)
-        pieChart.description.isEnabled = false
-        pieChart.centerText = "Uso de Plataformas"
         pieChart.animateY(1400)
         pieChart.invalidate()
+    }
 
-        findViewById<Button>(R.id.btnSeeAll).setOnClickListener {
-            startActivity(Intent(this, AllOperationsActivity::class.java))
-            finish()
+    private fun loadData() {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val userResp = RetrofitClient.api.getMe()
+                val allOpsResp = RetrofitClient.api.getAllOperations()
+
+                Log.d(TAG, "getAllOperations -> HTTP ${allOpsResp.code()}")
+                if (!allOpsResp.isSuccessful) {
+                    val err = allOpsResp.errorBody()?.string()
+                    Log.e(TAG, "getAllOperations error body: $err")
+                }
+
+                withContext(Dispatchers.Main) {
+                    if (userResp.isSuccessful && userResp.body() != null) {
+                        sessionManager.saveRoleId(userResp.body()!!.rol.id)
+                    }
+
+                    when {
+                        allOpsResp.isSuccessful -> {
+                            val lista = allOpsResp.body() ?: emptyList()
+                            Log.d(TAG, "Operations recibidas: ${lista.size}")
+                            operations.clear()
+                            operations.addAll(lista)
+                            setupChart()
+                        }
+                        allOpsResp.code() == 401 -> logout()
+                        else -> {
+                            Toast.makeText(
+                                this@AgentHomeActivity,
+                                "Error al cargar operaciones (HTTP ${allOpsResp.code()})",
+                                Toast.LENGTH_LONG
+                            ).show()
+                            setupChart()
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "loadData exception", e)
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(
+                        this@AgentHomeActivity,
+                        "Error: ${e.javaClass.simpleName} - ${e.message}",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
         }
+    }
+
+    companion object {
+        private const val TAG = "AgentHomeActivity"
     }
 
     private fun logout() {

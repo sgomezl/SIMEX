@@ -28,9 +28,6 @@ public class OperationsController : ControllerBase
         var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
         if (!int.TryParse(userIdClaim, out var userId)) return Unauthorized(new { message = "Token invalido." });
 
-        var user = await _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == userId);
-        if (user == null || user.CompanyId == null) return Ok(new List<OperationDto>());
-
         var operationsDto = await _context.Operations
         .AsNoTracking()
         .Select(op => new OperationDto

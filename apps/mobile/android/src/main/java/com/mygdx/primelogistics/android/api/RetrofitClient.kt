@@ -2,6 +2,7 @@ package com.mygdx.primelogistics.android.api
 
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -15,6 +16,9 @@ object RetrofitClient {
     }
 
     private val httpClient: OkHttpClient by lazy {
+        val logging = HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
         OkHttpClient.Builder()
             .addInterceptor { chain ->
                 val requestBuilder = chain.request().newBuilder()
@@ -27,6 +31,7 @@ object RetrofitClient {
 
                 chain.proceed(requestBuilder.build())
             }
+            .addInterceptor(logging)
             .build()
     }
 
