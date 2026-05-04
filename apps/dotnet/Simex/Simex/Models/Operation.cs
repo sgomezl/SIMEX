@@ -15,7 +15,7 @@ public partial class Operation
 
     public DateTime? PickupData { get; set; }
 
-    public int? IncortermId { get; set; }
+    public int? IncotermId { get; set; }
 
     public DateTime? Etd { get; set; }
 
@@ -73,6 +73,12 @@ public partial class Operation
 
     public decimal Profit { get; set; }
 
+    public int? TrackingFlowId { get; set; }
+
+    public int? CurrentTrackingFlowStepId { get; set; }
+
+    public DateTime? CurrentTrackingStepArrivedAt { get; set; }
+
     public virtual Company Buyer { get; set; } = null!;
 
     public virtual ContainerType? ContainerType { get; set; }
@@ -80,6 +86,8 @@ public partial class Operation
     public virtual ICollection<Cost> Costs { get; set; } = new List<Cost>();
 
     public virtual User CreateUser { get; set; } = null!;
+
+    public virtual TrackingFlowStep? CurrentTrackingFlowStep { get; set; }
 
     public virtual User CustomsAgent { get; set; } = null!;
 
@@ -89,15 +97,21 @@ public partial class Operation
 
     public virtual ICollection<Document> Documents { get; set; } = new List<Document>();
 
+    public virtual ICollection<Dua> Duas { get; set; } = new List<Dua>();
+
     public virtual Company Exportator { get; set; } = null!;
 
     public virtual Company? Importer { get; set; }
 
-    public virtual Incoterm? Incorterm { get; set; }
+    public virtual Incoterm? Incoterm { get; set; }
 
     public virtual Company Naviera { get; set; } = null!;
 
     public virtual ICollection<Notification> Notifications { get; set; } = new List<Notification>();
+
+    public virtual ICollection<OperationStateHistory> OperationStateHistories { get; set; } = new List<OperationStateHistory>();
+
+    public virtual ICollection<OperationTrackingHistory> OperationTrackingHistories { get; set; } = new List<OperationTrackingHistory>();
 
     public virtual User OperationUser { get; set; } = null!;
 
@@ -112,4 +126,6 @@ public partial class Operation
     public virtual Company Seller { get; set; } = null!;
 
     public virtual ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
+
+    public virtual TrackingFlow? TrackingFlow { get; set; }
 }

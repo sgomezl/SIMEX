@@ -6,10 +6,6 @@ namespace Simex.Models;
 
 public partial class Simex04Context : DbContext
 {
-    public Simex04Context()
-    {
-    }
-
     public Simex04Context(DbContextOptions<Simex04Context> options)
         : base(options)
     {
@@ -49,6 +45,12 @@ public partial class Simex04Context : DbContext
 
     public virtual DbSet<DocumentType> DocumentTypes { get; set; }
 
+    public virtual DbSet<Dua> Duas { get; set; }
+
+    public virtual DbSet<DuaState> DuaStates { get; set; }
+
+    public virtual DbSet<DuaStateHistory> DuaStateHistories { get; set; }
+
     public virtual DbSet<FailedJob> FailedJobs { get; set; }
 
     public virtual DbSet<FlowType> FlowTypes { get; set; }
@@ -77,6 +79,8 @@ public partial class Simex04Context : DbContext
 
     public virtual DbSet<OperationStateHistory> OperationStateHistories { get; set; }
 
+    public virtual DbSet<OperationTrackingHistory> OperationTrackingHistories { get; set; }
+
     public virtual DbSet<PackageType> PackageTypes { get; set; }
 
     public virtual DbSet<PasswordResetToken> PasswordResetTokens { get; set; }
@@ -103,6 +107,10 @@ public partial class Simex04Context : DbContext
 
     public virtual DbSet<TicketType> TicketTypes { get; set; }
 
+    public virtual DbSet<TrackingFlow> TrackingFlows { get; set; }
+
+    public virtual DbSet<TrackingFlowStep> TrackingFlowSteps { get; set; }
+
     public virtual DbSet<TrackingStep> TrackingSteps { get; set; }
 
     public virtual DbSet<TransportType> TransportTypes { get; set; }
@@ -112,14 +120,6 @@ public partial class Simex04Context : DbContext
     public virtual DbSet<UserNotificationConfig> UserNotificationConfigs { get; set; }
 
     public virtual DbSet<ValidationType> ValidationTypes { get; set; }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        if (!optionsBuilder.IsConfigured)
-        {
-            throw new InvalidOperationException("Simex04Context must be configured through dependency injection.");
-        }
-    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -488,6 +488,115 @@ public partial class Simex04Context : DbContext
                 .HasColumnName("NAME");
         });
 
+        modelBuilder.Entity<Dua>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__DUA__3214EC279E4549FC");
+
+            entity.ToTable("DUA");
+
+            entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.CreateUserId).HasColumnName("CREATE_USER_ID");
+            entity.Property(e => e.CreationDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime")
+                .HasColumnName("CREATION_DATE");
+            entity.Property(e => e.Destination)
+                .HasMaxLength(255)
+                .IsUnicode(false)
+                .HasColumnName("DESTINATION");
+            entity.Property(e => e.DocumentNumber)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasColumnName("DOCUMENT_NUMBER");
+            entity.Property(e => e.DuaStateId).HasColumnName("DUA_STATE_ID");
+            entity.Property(e => e.GoodsLocation)
+                .HasMaxLength(255)
+                .IsUnicode(false)
+                .HasColumnName("GOODS_LOCATION");
+            entity.Property(e => e.GrossWeight)
+                .HasColumnType("decimal(10, 2)")
+                .HasColumnName("GROSS_WEIGHT");
+            entity.Property(e => e.OperationId).HasColumnName("OPERATION_ID");
+            entity.Property(e => e.Origin)
+                .HasMaxLength(255)
+                .IsUnicode(false)
+                .HasColumnName("ORIGIN");
+            entity.Property(e => e.PresentationDate)
+                .HasColumnType("datetime")
+                .HasColumnName("PRESENTATION_DATE");
+            entity.Property(e => e.SpecificDestination)
+                .HasMaxLength(255)
+                .IsUnicode(false)
+                .HasColumnName("SPECIFIC_DESTINATION");
+
+            entity.HasOne(d => d.CreateUser).WithMany(p => p.Duas)
+                .HasForeignKey(d => d.CreateUserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__DUA__CREATE_USER__0ABD916C");
+
+            entity.HasOne(d => d.DuaState).WithMany(p => p.Duas)
+                .HasForeignKey(d => d.DuaStateId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__DUA__DUA_STATE_I__09C96D33");
+
+            entity.HasOne(d => d.Operation).WithMany(p => p.Duas)
+                .HasForeignKey(d => d.OperationId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__DUA__OPERATION_I__08D548FA");
+        });
+
+        modelBuilder.Entity<DuaState>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__DUA_STAT__3214EC2774A7F331");
+
+            entity.ToTable("DUA_STATES");
+
+            entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.Description)
+                .HasMaxLength(255)
+                .IsUnicode(false)
+                .HasColumnName("DESCRIPTION");
+            entity.Property(e => e.Name)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("NAME");
+        });
+
+        modelBuilder.Entity<DuaStateHistory>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__DUA_STAT__3214EC2795F3C55A");
+
+            entity.ToTable("DUA_STATE_HISTORY");
+
+            entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.ChangeDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime")
+                .HasColumnName("CHANGE_DATE");
+            entity.Property(e => e.DuaId).HasColumnName("DUA_ID");
+            entity.Property(e => e.DuaStateId).HasColumnName("DUA_STATE_ID");
+            entity.Property(e => e.Notes)
+                .HasMaxLength(512)
+                .IsUnicode(false)
+                .HasColumnName("NOTES");
+            entity.Property(e => e.UserId).HasColumnName("USER_ID");
+
+            entity.HasOne(d => d.Dua).WithMany(p => p.DuaStateHistories)
+                .HasForeignKey(d => d.DuaId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__DUA_STATE__DUA_I__0E8E2250");
+
+            entity.HasOne(d => d.DuaState).WithMany(p => p.DuaStateHistories)
+                .HasForeignKey(d => d.DuaStateId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__DUA_STATE__DUA_S__0F824689");
+
+            entity.HasOne(d => d.User).WithMany(p => p.DuaStateHistories)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__DUA_STATE__USER___116A8EFB");
+        });
+
         modelBuilder.Entity<FailedJob>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__failed_j__3213E83FC7AA60EA");
@@ -796,6 +905,10 @@ public partial class Simex04Context : DbContext
                 .HasColumnName("CONTAINER_NUMBER");
             entity.Property(e => e.ContainerTypeId).HasColumnName("CONTAINER_TYPE_ID");
             entity.Property(e => e.CreateUserId).HasColumnName("CREATE_USER_ID");
+            entity.Property(e => e.CurrentTrackingFlowStepId).HasColumnName("CURRENT_TRACKING_FLOW_STEP_ID");
+            entity.Property(e => e.CurrentTrackingStepArrivedAt)
+                .HasColumnType("datetime")
+                .HasColumnName("CURRENT_TRACKING_STEP_ARRIVED_AT");
             entity.Property(e => e.CustomsAgentId).HasColumnName("CUSTOMS_AGENT_ID");
             entity.Property(e => e.DestinationPortId).HasColumnName("DESTINATION_PORT_ID");
             entity.Property(e => e.DocumentUserId).HasColumnName("DOCUMENT_USER_ID");
@@ -811,7 +924,7 @@ public partial class Simex04Context : DbContext
                 .IsUnicode(false)
                 .HasColumnName("HS_CODE");
             entity.Property(e => e.ImporterId).HasColumnName("IMPORTER_ID");
-            entity.Property(e => e.IncortermId).HasColumnName("INCORTERM_ID");
+            entity.Property(e => e.IncotermId).HasColumnName("INCOTERM_ID");
             entity.Property(e => e.Kilograms)
                 .HasColumnType("decimal(10, 2)")
                 .HasColumnName("KILOGRAMS");
@@ -847,6 +960,7 @@ public partial class Simex04Context : DbContext
             entity.Property(e => e.TotalSale)
                 .HasColumnType("decimal(19, 2)")
                 .HasColumnName("TOTAL_SALE");
+            entity.Property(e => e.TrackingFlowId).HasColumnName("TRACKING_FLOW_ID");
             entity.Property(e => e.Volume)
                 .HasColumnType("decimal(10, 3)")
                 .HasColumnName("VOLUME");
@@ -864,6 +978,10 @@ public partial class Simex04Context : DbContext
                 .HasForeignKey(d => d.CreateUserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__OPERATION__CREAT__3118447E");
+
+            entity.HasOne(d => d.CurrentTrackingFlowStep).WithMany(p => p.Operations)
+                .HasForeignKey(d => d.CurrentTrackingFlowStepId)
+                .HasConstraintName("FK_OPERATIONS_CURRENT_TRACKING_STEP");
 
             entity.HasOne(d => d.CustomsAgent).WithMany(p => p.OperationCustomsAgents)
                 .HasForeignKey(d => d.CustomsAgentId)
@@ -889,8 +1007,8 @@ public partial class Simex04Context : DbContext
                 .HasForeignKey(d => d.ImporterId)
                 .HasConstraintName("FK__OPERATION__IMPOR__320C68B7");
 
-            entity.HasOne(d => d.Incorterm).WithMany(p => p.Operations)
-                .HasForeignKey(d => d.IncortermId)
+            entity.HasOne(d => d.Incoterm).WithMany(p => p.Operations)
+                .HasForeignKey(d => d.IncotermId)
                 .HasConstraintName("FK__OPERATION__INCOR__33008CF0");
 
             entity.HasOne(d => d.Naviera).WithMany(p => p.OperationNavieras)
@@ -926,6 +1044,10 @@ public partial class Simex04Context : DbContext
                 .HasForeignKey(d => d.SellerId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__OPERATION__SELLE__3C89F72A");
+
+            entity.HasOne(d => d.TrackingFlow).WithMany(p => p.Operations)
+                .HasForeignKey(d => d.TrackingFlowId)
+                .HasConstraintName("FK_OPERATIONS_TRACKING_FLOW");
         });
 
         modelBuilder.Entity<OperationState>(entity =>
@@ -955,11 +1077,58 @@ public partial class Simex04Context : DbContext
             entity.Property(e => e.Date)
                 .HasColumnType("datetime")
                 .HasColumnName("DATE");
+            entity.Property(e => e.Observations)
+                .HasMaxLength(255)
+                .IsUnicode(false)
+                .HasColumnName("OBSERVATIONS");
+            entity.Property(e => e.OperationId).HasColumnName("OPERATION_ID");
             entity.Property(e => e.OperationStateId).HasColumnName("OPERATION_STATE_ID");
+
+            entity.HasOne(d => d.Operation).WithMany(p => p.OperationStateHistories)
+                .HasForeignKey(d => d.OperationId)
+                .HasConstraintName("FK__OPERATION__OPERA__041093DD");
 
             entity.HasOne(d => d.OperationState).WithMany(p => p.OperationStateHistories)
                 .HasForeignKey(d => d.OperationStateId)
                 .HasConstraintName("FK__OPERATION__OPERA__4BCC3ABA");
+        });
+
+        modelBuilder.Entity<OperationTrackingHistory>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__OPERATIO__3214EC273DA87CFF");
+
+            entity.ToTable("OPERATION_TRACKING_HISTORY");
+
+            entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.ArrivedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime")
+                .HasColumnName("ARRIVED_AT");
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime")
+                .HasColumnName("CREATED_AT");
+            entity.Property(e => e.Observations)
+                .HasMaxLength(255)
+                .IsUnicode(false)
+                .HasColumnName("OBSERVATIONS");
+            entity.Property(e => e.OperationId).HasColumnName("OPERATION_ID");
+            entity.Property(e => e.TrackingFlowStepId).HasColumnName("TRACKING_FLOW_STEP_ID");
+            entity.Property(e => e.UserId).HasColumnName("USER_ID");
+
+            entity.HasOne(d => d.Operation).WithMany(p => p.OperationTrackingHistories)
+                .HasForeignKey(d => d.OperationId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_OPERATION_TRACKING_HISTORY_OPERATIONS");
+
+            entity.HasOne(d => d.TrackingFlowStep).WithMany(p => p.OperationTrackingHistories)
+                .HasForeignKey(d => d.TrackingFlowStepId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_OPERATION_TRACKING_HISTORY_STEP");
+
+            entity.HasOne(d => d.User).WithMany(p => p.OperationTrackingHistories)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK_OPERATION_TRACKING_HISTORY_USER");
         });
 
         modelBuilder.Entity<PackageType>(entity =>
@@ -1238,6 +1407,81 @@ public partial class Simex04Context : DbContext
                 .HasMaxLength(255)
                 .IsUnicode(false)
                 .HasColumnName("NAME");
+        });
+
+        modelBuilder.Entity<TrackingFlow>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__TRACKING__3214EC27DFDAA367");
+
+            entity.ToTable("TRACKING_FLOWS");
+
+            entity.HasIndex(e => e.Code, "UQ_TRACKING_FLOWS_CODE").IsUnique();
+
+            entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.Active)
+                .HasDefaultValue(true)
+                .HasColumnName("ACTIVE");
+            entity.Property(e => e.Code)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("CODE");
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime")
+                .HasColumnName("CREATED_AT");
+            entity.Property(e => e.Name)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasColumnName("NAME");
+            entity.Property(e => e.TransportTypeId).HasColumnName("TRANSPORT_TYPE_ID");
+            entity.Property(e => e.UpdatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime")
+                .HasColumnName("UPDATED_AT");
+
+            entity.HasOne(d => d.TransportType).WithMany(p => p.TrackingFlows)
+                .HasForeignKey(d => d.TransportTypeId)
+                .HasConstraintName("FK_TRACKING_FLOWS_TRANSPORT_TYPE");
+        });
+
+        modelBuilder.Entity<TrackingFlowStep>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__TRACKING__3214EC277C3C0E22");
+
+            entity.ToTable("TRACKING_FLOW_STEPS");
+
+            entity.HasIndex(e => new { e.TrackingFlowId, e.StepKey }, "UQ_TRACKING_FLOW_STEPS_FLOW_KEY").IsUnique();
+
+            entity.HasIndex(e => new { e.TrackingFlowId, e.OrderNum }, "UQ_TRACKING_FLOW_STEPS_FLOW_ORDER").IsUnique();
+
+            entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.Active)
+                .HasDefaultValue(true)
+                .HasColumnName("ACTIVE");
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime")
+                .HasColumnName("CREATED_AT");
+            entity.Property(e => e.Name)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasColumnName("NAME");
+            entity.Property(e => e.OrderNum).HasColumnName("ORDER_NUM");
+            entity.Property(e => e.StepKey)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("STEP_KEY");
+            entity.Property(e => e.TrackingFlowId).HasColumnName("TRACKING_FLOW_ID");
+            entity.Property(e => e.UiPercent).HasColumnName("UI_PERCENT");
+            entity.Property(e => e.UpdatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime")
+                .HasColumnName("UPDATED_AT");
+
+            entity.HasOne(d => d.TrackingFlow).WithMany(p => p.TrackingFlowSteps)
+                .HasForeignKey(d => d.TrackingFlowId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_TRACKING_FLOW_STEPS_FLOW");
         });
 
         modelBuilder.Entity<TrackingStep>(entity =>

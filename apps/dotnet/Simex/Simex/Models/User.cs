@@ -29,6 +29,10 @@ public partial class User
 
     public virtual ICollection<Document> Documents { get; set; } = new List<Document>();
 
+    public virtual ICollection<DuaStateHistory> DuaStateHistories { get; set; } = new List<DuaStateHistory>();
+
+    public virtual ICollection<Dua> Duas { get; set; } = new List<Dua>();
+
     public virtual ICollection<Notification> Notifications { get; set; } = new List<Notification>();
 
     public virtual ICollection<Offer> Offers { get; set; } = new List<Offer>();
@@ -42,6 +46,8 @@ public partial class User
     public virtual ICollection<Operation> OperationOperationUsers { get; set; } = new List<Operation>();
 
     public virtual ICollection<Operation> OperationSalesUsers { get; set; } = new List<Operation>();
+
+    public virtual ICollection<OperationTrackingHistory> OperationTrackingHistories { get; set; } = new List<OperationTrackingHistory>();
 
     public virtual Role Role { get; set; } = null!;
 

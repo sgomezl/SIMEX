@@ -1,5 +1,6 @@
 ## Gradle:
 .gradle/
+/.gradle-home/
 gradle-app.setting
 /build/
 /android/build/

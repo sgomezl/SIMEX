@@ -2,14 +2,18 @@ package com.mygdx.primelogistics.android
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mygdx.primelogistics.R
 import com.mygdx.primelogistics.android.adapters.OpAdapter
+import com.mygdx.primelogistics.android.adapters.PropAdapter
 import com.mygdx.primelogistics.android.api.RetrofitClient
 import com.mygdx.primelogistics.android.models.Operation
 import com.mygdx.primelogistics.android.utils.SessionManager
@@ -21,8 +25,13 @@ import kotlinx.coroutines.withContext
 class ClientHomeActivity : AppCompatActivity() {
     private lateinit var sessionManager: SessionManager
     private lateinit var tvUserName: TextView
+
     private lateinit var recyclerRecent: RecyclerView
     private lateinit var adapterRecent: OpAdapter
+
+    private lateinit var recyclerProp: RecyclerView
+    private lateinit var adapterProp: PropAdapter
+
     private var operations: MutableList<Operation> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,24 +39,43 @@ class ClientHomeActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_client_home)
 
-        sessionManager = SessionManager(this)
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.mainClientHome)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
 
+        sessionManager = SessionManager(this)
         RetrofitClient.init { sessionManager.getAccessToken() }
 
         tvUserName = findViewById(R.id.tvUserName)
+
         recyclerRecent = findViewById(R.id.rvRecent)
         recyclerRecent.layoutManager = LinearLayoutManager(this)
-
         adapterRecent = OpAdapter(operations) { operation ->
-            // Click listener
+            startActivity(DetalleOperacionActivity.createIntent(this, operation))
         }
         recyclerRecent.adapter = adapterRecent
 
-        loadData()
+        recyclerProp = findViewById(R.id.rvProp)
+        recyclerProp.layoutManager = LinearLayoutManager(this)
+        adapterProp = PropAdapter(operations) { operation ->
+            startActivity(PropuestaActivity.createIntent(this, operation))
+        }
+        recyclerProp.adapter = adapterProp
 
         findViewById<ImageButton>(R.id.btnUser).setOnClickListener {
             startActivity(Intent(this, UsuarioActivity::class.java))
         }
+
+        findViewById<Button>(R.id.btnSeeAll).setOnClickListener {
+            startActivity(Intent(this, AllOperationsActivity::class.java))
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        loadData()
     }
 
     private fun loadData() {
@@ -57,9 +85,10 @@ class ClientHomeActivity : AppCompatActivity() {
                 val opsResp = RetrofitClient.api.getRecentUserOperations()
 
                 withContext(Dispatchers.Main) {
-
                     if (userResp.isSuccessful && userResp.body() != null) {
-                        tvUserName.text = userResp.body()?.nombre
+                        val user = userResp.body()!!
+                        sessionManager.saveRoleId(user.rol.id)
+                        tvUserName.text = user.nombre
                     } else {
                         tvUserName.text = "Null"
                     }
@@ -67,6 +96,7 @@ class ClientHomeActivity : AppCompatActivity() {
                     if (opsResp.isSuccessful) {
                         val lista = opsResp.body() ?: emptyList()
                         adapterRecent.updateData(lista)
+                        adapterProp.updateData(lista)
                     } else if (opsResp.code() == 401) {
                         logout()
                     }

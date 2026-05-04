@@ -9,7 +9,15 @@ data class Operation (
     val totalCost: Double,
     val etd: String,
     val eta: String,
-    val incotermId: Int?,
+    val incotermCode: String,
     val piecesNumber: Int?,
-    val kilograms: Double
+    val kilograms: Double,
+    val statusName: String?,
+    val trackingFlowId: Int?,
+    val trackingFlowName: String?,
+    val currentTrackingFlowStepId: Int?,
+    val currentTrackingStepName: String?,
+    val currentTrackingStepOrder: Int?,
+    val currentTrackingStepUiPercent: Int?,
+    val currentTrackingStepArrivedAt: String?
 )

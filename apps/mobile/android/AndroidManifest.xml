@@ -6,29 +6,8 @@
         android:glEsVersion="0x00020000"
         android:required="true" />
 
-<<<<<<< HEAD
     <uses-permission android:name="android.permission.INTERNET" />
 
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-    <uses-permission android:name="android.permission.INTERNET" />
-
-=======
->>>>>>> 9001d2c (chore: fix activity theme configuration and modify AndoridManifest.xml)
-=======
-    <uses-permission android:name="android.permission.INTERNET" />
-
->>>>>>> c118762 (feat: add dependencies necessary for api)
-=======
->>>>>>> 9001d2c (chore: fix activity theme configuration and modify AndoridManifest.xml)
-=======
-    <uses-permission android:name="android.permission.INTERNET" />
-
->>>>>>> c118762 (feat: add dependencies necessary for api)
->>>>>>> b70ecef7239b91ae7ccaf9d3f344c8f26a51b981
     <application
         android:allowBackup="true"
         android:appCategory="productivity"
@@ -36,27 +15,13 @@
         android:icon="@drawable/logotipo"
         android:isGame="false"
         android:label="@string/app_name"
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-        android:usesCleartextTraffic="true"
-=======
->>>>>>> 9001d2c (chore: fix activity theme configuration and modify AndoridManifest.xml)
-=======
-        android:usesCleartextTraffic="true"
->>>>>>> 6fb87c1 (chore: update manifest)
-=======
->>>>>>> 9001d2c (chore: fix activity theme configuration and modify AndoridManifest.xml)
-=======
-        android:usesCleartextTraffic="true"
->>>>>>> 6fb87c1 (chore: update manifest)
->>>>>>> b70ecef7239b91ae7ccaf9d3f344c8f26a51b981
         android:theme="@style/Theme.PrimeLogistics"
         android:usesCleartextTraffic="true"
         tools:ignore="UnusedAttribute">
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
 
         <activity
             android:name="com.mygdx.primelogistics.android.LoginActivity"
@@ -69,11 +34,18 @@
 
         <activity
             android:name="com.mygdx.primelogistics.android.ClientHomeActivity"
-            android:exported="true">
-        </activity>
+            android:exported="false" />
+
+        <activity
+            android:name="com.mygdx.primelogistics.android.AgentHomeActivity"
+            android:exported="false" />
 
         <activity
             android:name="com.mygdx.primelogistics.android.UsuarioActivity"
+            android:exported="false" />
+
+        <activity
+            android:name="com.mygdx.primelogistics.android.AllOperationsActivity"
             android:exported="false" />
 
         <activity
@@ -82,6 +54,18 @@
 
         <activity
             android:name="com.mygdx.primelogistics.android.DescargarDniActivity"
+            android:exported="false" />
+
+        <activity
+            android:name="com.mygdx.primelogistics.android.DetalleOperacionActivity"
+            android:exported="false" />
+
+        <activity
+            android:name="com.mygdx.primelogistics.android.DetalleOperacionOperatorActivity"
+            android:exported="false" />
+
+        <activity
+            android:name="com.mygdx.primelogistics.android.PropuestaActivity"
             android:exported="false" />
 
         <activity

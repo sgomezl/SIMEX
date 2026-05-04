@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/dialog_rechazo_background"
+    android:orientation="vertical"
+    android:paddingHorizontal="22dp"
+    android:paddingTop="28dp"
+    android:paddingBottom="22dp">
+
+    <TextView
+        android:id="@+id/tvRejectDialogTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/montserrat_bold"
+        android:gravity="center"
+        android:text="Motivo de rechazo:"
+        android:textColor="@color/principal"
+        android:textSize="20sp" />
+
+    <EditText
+        android:id="@+id/etMotivoRechazo"
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:layout_marginTop="18dp"
+        android:background="@drawable/dialog_rechazo_input"
+        android:fontFamily="@font/montserrat_medium"
+        android:gravity="top|start"
+        android:hint="Escribe el motivo..."
+        android:inputType="textCapSentences|textMultiLine"
+        android:padding="16dp"
+        android:textColor="@color/principal"
+        android:textColorHint="@color/texto_claro"
+        android:textSize="18sp" />
+
+    <CheckBox
+        android:id="@+id/cbConfirmReject"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:buttonTint="@color/principal"
+        android:fontFamily="@font/montserrat_bold"
+        android:text="Marca la casilla para confirmar"
+        android:textColor="@color/principal"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/btnConfirmReject"
+        android:layout_width="156dp"
+        android:layout_height="52dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/btn_rechazo_dialog"
+        android:enabled="false"
+        android:fontFamily="@font/montserrat_bold"
+        android:text="Rechazar"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        android:textSize="18sp" />
+
+</LinearLayout>

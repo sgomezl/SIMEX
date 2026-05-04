@@ -16,6 +16,8 @@ import androidx.lifecycle.lifecycleScope
 import com.mygdx.primelogistics.R
 import com.mygdx.primelogistics.android.api.RetrofitClient
 import com.mygdx.primelogistics.android.models.UpdateIdentificationCardPathRequest
+import com.mygdx.primelogistics.android.utils.DataSecurity
+import com.mygdx.primelogistics.android.utils.HomeNavigator
 import com.mygdx.primelogistics.android.utils.SessionManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -29,6 +31,7 @@ class SubirDniActivity : AppCompatActivity() {
     private lateinit var btnHomeUsuario: ImageButton
     private lateinit var btnVolver: Button
     private lateinit var btnSubirDNI: ImageButton
+    private lateinit var sessionManager: SessionManager
     private lateinit var tvUserName: TextView
     private lateinit var tvCompanyName: TextView
     private lateinit var tvSelectedFile: TextView
@@ -42,6 +45,9 @@ class SubirDniActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_subir_dni)
+
+        sessionManager = SessionManager(this)
+        RetrofitClient.init { sessionManager.getAccessToken() }
 
         definirComponentes()
         leerDatosIntent()
@@ -80,7 +86,7 @@ class SubirDniActivity : AppCompatActivity() {
 
     private fun configurarEventos() {
         btnHomeUsuario.setOnClickListener {
-            volverAUsuario()
+            HomeNavigator.navigateToHome(this)
         }
 
         btnVolver.setOnClickListener {
@@ -96,21 +102,6 @@ class SubirDniActivity : AppCompatActivity() {
         val intent = Intent(this, UsuarioActivity::class.java)
         startActivity(intent)
         finish()
-    }
-
-    private fun obtenerNombreArchivo(uri: Uri): String? {
-        var fileName: String? = null
-
-        val cursor = contentResolver.query(uri, null, null, null, null)
-        cursor?.use {
-            val nameIndex = it.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-
-            if (it.moveToFirst() && nameIndex >= 0) {
-                fileName = it.getString(nameIndex)
-            }
-        }
-
-        return fileName
     }
 
     private val pickDocument = registerForActivityResult(
@@ -150,36 +141,34 @@ class SubirDniActivity : AppCompatActivity() {
     }
 
     private suspend fun subirArchivoServidor(userId: Int, uri: Uri): String? {
-        val fileName = obtenerNombreArchivo(uri) ?: return null
-        val fileBytes = leerBytesArchivo(uri) ?: return null
+            val fileBytes = leerBytesArchivo(uri) ?: return null
+            val fileName = obtenerNombreArchivo(uri) ?: return null
+            val encryptedData = DataSecurity.encriptarDatos(fileBytes, currentUserId)
 
-        return withContext(Dispatchers.IO) {
-            try {
-                Socket("10.0.2.2", 5000).use { socket ->
-                    val input = DataInputStream(socket.getInputStream())
-                    val output = DataOutputStream(socket.getOutputStream())
+            return withContext(Dispatchers.IO) {
+                try {
+                    Socket("10.0.2.2", 5000).use { socket ->
+                        val input = DataInputStream(socket.getInputStream())
+                        val output = DataOutputStream(socket.getOutputStream())
 
-                    output.writeUTF("UPLOAD")
-                    output.writeInt(userId)
-                    output.writeUTF(fileName)
-                    output.writeLong(fileBytes.size.toLong())
-                    output.write(fileBytes)
-                    output.flush()
+                        output.writeUTF("UPLOAD")
+                        output.writeInt(userId)
+                        output.writeUTF("$fileName.enc")
+                        output.writeLong(encryptedData.size.toLong())
+                        output.write(encryptedData)
+                        output.flush()
 
-                    val response = input.readUTF()
-                    val savedFileName = input.readUTF()
+                        val response = input.readUTF()
+                        val savedFileName = input.readUTF()
 
-                    if (response == "OK") {
-                        savedFileName
-                    } else {
-                        null
+                        if (response == "OK") savedFileName else null
                     }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    null
                 }
-            } catch (e: Exception) {
-                null
             }
         }
-    }
 
     private fun leerBytesArchivo(uri: Uri): ByteArray? {
         return try {
@@ -192,11 +181,10 @@ class SubirDniActivity : AppCompatActivity() {
     }
 
     private suspend fun actualizarRutaDni(savedFileName: String): Boolean {
-        val token = SessionManager(this).getAccessToken() ?: return false
+        val token = sessionManager.getAccessToken() ?: return false
 
         return try {
             val response = RetrofitClient.api.updateIdentificationCardPath(
-                authorization = "Bearer $token",
                 request = UpdateIdentificationCardPathRequest(savedFileName)
             )
 
@@ -204,5 +192,19 @@ class SubirDniActivity : AppCompatActivity() {
         } catch (e: Exception) {
             false
         }
+    }
+
+    fun obtenerNombreArchivo(uri: Uri): String? {
+        var fileName: String? = null
+
+        val cursor = contentResolver.query(uri, null, null, null, null)
+        cursor?.use {
+            val nameIndex = it.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+
+            if (it.moveToFirst() && nameIndex >= 0) {
+                fileName = it.getString(nameIndex)
+            }
+        }
+        return fileName
     }
 }
