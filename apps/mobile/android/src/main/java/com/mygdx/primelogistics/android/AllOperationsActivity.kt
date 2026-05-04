@@ -51,7 +51,12 @@ class AllOperationsActivity : AppCompatActivity() {
         recyclerAllOps.layoutManager = LinearLayoutManager(this)
 
         adapterAllOps = OpAdapter(operations) { operation ->
-            startActivity(DetalleOperacionActivity.createIntent(this, operation))
+            val destinationIntent = if (sessionManager.getRoleId() == HomeNavigator.LOGISTICS_OPERATOR_ROLE_ID) {
+                DetalleOperacionOperatorActivity.createIntent(this, operation)
+            } else {
+                DetalleOperacionActivity.createIntent(this, operation)
+            }
+            startActivity(destinationIntent)
         }
         recyclerAllOps.adapter = adapterAllOps
 

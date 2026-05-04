@@ -73,6 +73,10 @@ class ClientHomeActivity : AppCompatActivity() {
             startActivity(Intent(this, AllOperationsActivity::class.java))
             finish()
         }
+
+        findViewById<Button>(R.id.btnSeeAll).setOnClickListener {
+            startActivity(Intent(this, AllOperationsActivity::class.java))
+        }
     }
 
     override fun onResume() {

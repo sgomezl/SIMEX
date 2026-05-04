@@ -327,33 +327,140 @@ public class OperationsController : ControllerBase
                     }
                     else
                     {
-                        var currentStep = await _context.TrackingFlowSteps
-                            .AsNoTracking()
-                            .Where(step => step.Id == operation.CurrentTrackingFlowStepId)
-                            .Select(step => new
-                            {
-                                step.Id,
-                                step.Name,
-                                step.OrderNum,
-                                step.TrackingFlowId
-                            })
-                            .FirstOrDefaultAsync();
-
-                        result = Ok(new
-                        {
-                            message = "Tracking actualizado correctamente.",
-                            operationId = operation.Id,
-                            trackingFlowId = operation.TrackingFlowId,
-                            currentTrackingStepId = operation.CurrentTrackingFlowStepId,
-                            currentTrackingStepName = currentStep?.Name,
-                            currentTrackingStepOrder = currentStep?.OrderNum,
-                            currentTrackingStepArrivedAt = operation.CurrentTrackingStepArrivedAt
-                        });
+                        result = Ok(await BuildTrackingStepResponseAsync(operation, "Tracking actualizado correctamente."));
                     }
                 }
             }
         }
 
         return result;
+    }
+
+    [HttpPost("{operationId:int}/tracking/advance")]
+    public async Task<IActionResult> AdvanceCurrentTrackingStep(int operationId, [FromBody] AdvanceOperationTrackingStepRequestDto? request)
+    {
+        IActionResult result;
+        var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        if (!int.TryParse(userIdClaim, out var userId))
+        {
+            result = Unauthorized(new { message = "Token invalido." });
+        }
+        else
+        {
+            var user = await _context.Users
+                .AsNoTracking()
+                .FirstOrDefaultAsync(u => u.Id == userId);
+
+            if (user == null || user.CompanyId == null)
+            {
+                result = NotFound(new { message = "Usuario no encontrado o sin empresa asociada." });
+            }
+            else
+            {
+                var operation = await _context.Operations
+                    .FirstOrDefaultAsync(op => op.Id == operationId && op.NavieraId == user.CompanyId);
+
+                if (operation == null)
+                {
+                    result = NotFound(new { message = "Operacion no encontrada." });
+                }
+                else if (operation.TrackingFlowId == null)
+                {
+                    result = BadRequest(new { message = "La operacion no tiene un flow de tracking configurado." });
+                }
+                else
+                {
+                    TrackingFlowStep? nextStep;
+
+                    if (operation.CurrentTrackingFlowStepId == null)
+                    {
+                        nextStep = await _context.TrackingFlowSteps
+                            .AsNoTracking()
+                            .Where(step => step.TrackingFlowId == operation.TrackingFlowId && step.Active)
+                            .OrderBy(step => step.OrderNum)
+                            .FirstOrDefaultAsync();
+                    }
+                    else
+                    {
+                        var currentStep = await _context.TrackingFlowSteps
+                            .AsNoTracking()
+                            .FirstOrDefaultAsync(step =>
+                                step.Id == operation.CurrentTrackingFlowStepId &&
+                                step.TrackingFlowId == operation.TrackingFlowId);
+
+                        if (currentStep == null)
+                        {
+                            result = BadRequest(new { message = "El step actual de la operacion no es valido." });
+                            return result;
+                        }
+
+                        nextStep = await _context.TrackingFlowSteps
+                            .AsNoTracking()
+                            .Where(step =>
+                                step.TrackingFlowId == currentStep.TrackingFlowId &&
+                                step.Active &&
+                                step.OrderNum > currentStep.OrderNum)
+                            .OrderBy(step => step.OrderNum)
+                            .FirstOrDefaultAsync();
+                    }
+
+                    if (nextStep == null)
+                    {
+                        result = BadRequest(new { message = "La operacion ya se encuentra en el ultimo paso del tracking." });
+                    }
+                    else
+                    {
+                        var updateResult = await _operationTrackingService.UpdateCurrentStepAsync(
+                            operation,
+                            nextStep.Id,
+                            request?.ArrivedAt,
+                            request?.Observations,
+                            userId,
+                            HttpContext.RequestAborted
+                        );
+
+                        if (!updateResult.IsValid)
+                        {
+                            result = BadRequest(new { message = updateResult.ErrorMessage });
+                        }
+                        else
+                        {
+                            result = Ok(await BuildTrackingStepResponseAsync(operation, "Tracking avanzado correctamente."));
+                        }
+                    }
+                }
+            }
+        }
+
+        return result;
+    }
+
+    private async Task<object> BuildTrackingStepResponseAsync(Operation operation, string message)
+    {
+        var currentStep = await _context.TrackingFlowSteps
+            .AsNoTracking()
+            .Where(step => step.Id == operation.CurrentTrackingFlowStepId)
+            .Select(step => new
+            {
+                step.Id,
+                step.Name,
+                step.OrderNum,
+                step.TrackingFlowId,
+                step.UiPercent
+            })
+            .FirstOrDefaultAsync();
+
+        return new
+        {
+            message,
+            operationId = operation.Id,
+            trackingFlowId = operation.TrackingFlowId,
+            currentTrackingStepId = operation.CurrentTrackingFlowStepId,
+            currentTrackingStepName = currentStep?.Name,
+            currentTrackingStepOrder = currentStep?.OrderNum,
+            currentTrackingStepUiPercent = currentStep?.UiPercent,
+            currentTrackingStepArrivedAt = operation.CurrentTrackingStepArrivedAt
+        };
     }
 }

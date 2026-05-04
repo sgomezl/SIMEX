@@ -1,7 +1,9 @@
 package com.mygdx.primelogistics.android.api
 
+import com.mygdx.primelogistics.android.models.AdvanceOperationTrackingStepRequest
 import com.mygdx.primelogistics.android.models.LoginRequest
 import com.mygdx.primelogistics.android.models.LoginResponse
+import com.mygdx.primelogistics.android.models.OperationTrackingStepResponse
 import com.mygdx.primelogistics.android.models.RejectOperationRequest
 import com.mygdx.primelogistics.android.models.UpdateIdentificationCardPathRequest
 import com.mygdx.primelogistics.android.models.Operation
@@ -45,4 +47,10 @@ interface ApiService {
     suspend fun acceptOperation(
         @Path("operationId") operationId: Int
     ): Response<ResponseBody>
+
+    @POST("api/operations/{operationId}/tracking/advance")
+    suspend fun advanceOperationTrackingStep(
+        @Path("operationId") operationId: Int,
+        @Body request: AdvanceOperationTrackingStepRequest
+    ): Response<OperationTrackingStepResponse>
 }
