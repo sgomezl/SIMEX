@@ -13,6 +13,7 @@ namespace Simex.Controllers;
 [Authorize]
 public class OperationsController : ControllerBase
 {
+    private const int LogisticsOperatorRoleId = 3;
     private readonly Simex04Context _context;
     private readonly IOperationTrackingService _operationTrackingService;
 
@@ -162,15 +163,15 @@ public class OperationsController : ControllerBase
                 .AsNoTracking()
                 .FirstOrDefaultAsync(u => u.Id == userId);
 
-            if (user == null || user.CompanyId == null)
+            if (user == null || (!IsLogisticsOperator(user) && user.CompanyId == null))
             {
                 result = NotFound(new { message = "Usuario no encontrado o sin empresa asociada." });
             }
             else
             {
-                var operation = await _context.Operations
+                var operation = await BuildAccessibleOperationsQuery(user)
                     .AsNoTracking()
-                    .FirstOrDefaultAsync(op => op.Id == operationId && op.NavieraId == user.CompanyId);
+                    .FirstOrDefaultAsync(op => op.Id == operationId);
 
                 if (operation == null)
                 {
@@ -231,15 +232,15 @@ public class OperationsController : ControllerBase
                 .AsNoTracking()
                 .FirstOrDefaultAsync(u => u.Id == userId);
 
-            if (user == null || user.CompanyId == null)
+            if (user == null || (!IsLogisticsOperator(user) && user.CompanyId == null))
             {
                 result = NotFound(new { message = "Usuario no encontrado o sin empresa asociada." });
             }
             else
             {
-                var operation = await _context.Operations
+                var operation = await BuildAccessibleOperationsQuery(user)
                     .AsNoTracking()
-                    .FirstOrDefaultAsync(op => op.Id == operationId && op.NavieraId == user.CompanyId);
+                    .FirstOrDefaultAsync(op => op.Id == operationId);
 
                 if (operation == null)
                 {
@@ -297,14 +298,14 @@ public class OperationsController : ControllerBase
                 .AsNoTracking()
                 .FirstOrDefaultAsync(u => u.Id == userId);
 
-            if (user == null || user.CompanyId == null)
+            if (user == null || (!IsLogisticsOperator(user) && user.CompanyId == null))
             {
                 result = NotFound(new { message = "Usuario no encontrado o sin empresa asociada." });
             }
             else
             {
-                var operation = await _context.Operations
-                    .FirstOrDefaultAsync(op => op.Id == operationId && op.NavieraId == user.CompanyId);
+                var operation = await BuildAccessibleOperationsQuery(user)
+                    .FirstOrDefaultAsync(op => op.Id == operationId);
 
                 if (operation == null)
                 {
@@ -352,14 +353,14 @@ public class OperationsController : ControllerBase
                 .AsNoTracking()
                 .FirstOrDefaultAsync(u => u.Id == userId);
 
-            if (user == null || user.CompanyId == null)
+            if (user == null || (!IsLogisticsOperator(user) && user.CompanyId == null))
             {
                 result = NotFound(new { message = "Usuario no encontrado o sin empresa asociada." });
             }
             else
             {
-                var operation = await _context.Operations
-                    .FirstOrDefaultAsync(op => op.Id == operationId && op.NavieraId == user.CompanyId);
+                var operation = await BuildAccessibleOperationsQuery(user)
+                    .FirstOrDefaultAsync(op => op.Id == operationId);
 
                 if (operation == null)
                 {
@@ -439,6 +440,23 @@ public class OperationsController : ControllerBase
         }
 
         return result;
+    }
+
+    private IQueryable<Operation> BuildAccessibleOperationsQuery(User user)
+    {
+        var query = _context.Operations.AsQueryable();
+
+        if (IsLogisticsOperator(user))
+        {
+            return query;
+        }
+
+        return query.Where(op => op.NavieraId == user.CompanyId);
+    }
+
+    private static bool IsLogisticsOperator(User user)
+    {
+        return user.RoleId == LogisticsOperatorRoleId;
     }
 
     private async Task<(bool IsValid, int? TrackingFlowId, string? ErrorMessage)> ResolveTrackingFlowIdAsync(Operation operation)
