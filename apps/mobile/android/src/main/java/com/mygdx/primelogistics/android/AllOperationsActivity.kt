@@ -77,8 +77,13 @@ class AllOperationsActivity : AppCompatActivity() {
     private fun loadData() {
         CoroutineScope(Dispatchers.IO).launch {
             try {
+                val rolActual = sessionManager.getRoleId()
                 val userResp = RetrofitClient.api.getMe()
-                val opsResp = RetrofitClient.api.getUserOperations()
+                var opsResp = if (rolActual == 3) {
+                    RetrofitClient.api.getAllOperations()
+                } else {
+                    RetrofitClient.api.getUserOperations()
+                }
 
                 withContext(Dispatchers.Main) {
                     if (userResp.isSuccessful && userResp.body() != null) {
